@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <fstream> // includes both
+#include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -7,15 +10,157 @@ int attempts = 0;
 
 //void menu(string& input, int& stringToInt);
 //void validInputCheckerFromOneToNine(string& input, int& stringToInt);
-void validInputChecker(string& input, int& stringToInt, int& noOfOptions, int& attempts);
+void validInputChecker(string& input, int& stringToInt, int& noOfMenuOptions);
 void adminLogin(int& attempts);
-void adminMenu();
+
+
+
+void createDonor();
+
+void createRecipient();
+
+void readDonorReport();
+void readRecipientReport();
+
+void makeChangeDonor();
+void makeChangeRecipient();
+
+
+void printAdminMenu();
+void loggedInAdminOptions(string& input, int& stringToInt, int& noOfMenuOptions);
+/* Too convoluted to have donorBloodTestsReport as seperate file
+void donorBloodTestReport() {
+
+    fstream fileIn;
+
+
+    vector<vector<string>> personVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    //Assigning the file to read and flag
+    fileIn.open("pete_blood_donors.csv", ios::in); // ios in is to receive data from an external file
+
+    if (fileIn.is_open()) { //is open checks if the file is open or not
+        //WHile there is content to copy from fileIn to line, loop
+        while (getline(fileIn, line)) {
+            rowOfIndividualsInfo.clear();//get string of rowOfIndividualsInfo and remove all it's content
+
+            stringstream str(line); //sstream requires it's own pre-processor initialization. converfts file data to string format
+
+            //while there is content within the string, copy to WORD and stop at each comma
+            while (getline(str, word, ','))
+                rowOfIndividualsInfo.push_back(word); //appending content of var WORD into rowOfIndividualsInfo
+
+            personVector.push_back(rowOfIndividualsInfo); //Appending the rowOfIndividualsInfo content into CONTENT variable
+        }
+    }
+    else {
+        cout << "No file found\n";
+    }
+
+
+    cout << "This is the data: \n";
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[j][i] << ",";
+        }
+        cout << endl;
+    }
+
+
+
+    vector<string> donorPatientNumber;
+    vector<string> donorReportInfo;
+
+    for (int i = 0; i < personVector.size(); i++) {
+        donorPatientNumber.push_back(personVector[i][0]);
+        cout << donorPatientNumber[i] << ",";
+        if (donorReportInfo.size() < personVector.size()) {
+            donorReportInfo.push_back("No report info");
+        cout << donorReportInfo[i];
+        }
+        cout << "\n";
+    }
+
+
+
+    fstream fileOut;
+
+    // Create a new file to store updated data
+    fileOut.open("pete_blood_donors_reports_new.csv", ios::out);
+    if (!fileOut) {
+        cout << "No files found\n";
+        return;
+    }
+
+
+    for (int i = 0; i < personVector.size(); i++) {
+        if (personVector.size() > donorPatientNumber.size()) {
+            fileOut << donorPatientNumber[i] << ",";
+        };
+        if (donorReportInfo.size() < 1) {
+            donorReportInfo.push_back("No report info");
+            fileOut << donorReportInfo[i] << "\n";
+        }
+    }
+
+
+
+
+
+
+
+
+        cout << "Choose patient number to edit report: ";
+    int n;
+    cin >> n;
+    cout << "Change the report to what? ";
+    string reportUpdate;
+    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); getline(cin, reportUpdate);
+    donorReportInfo[n] = reportUpdate;
+
+    
+    for (int i = 0; i < personVector.size(); i++) {
+        donorPatientNumber.push_back(personVector[i][0]);
+        cout << donorPatientNumber[i] << ",";
+        cout << donorReportInfo[i] << "\n";
+    }
+    
+    for (int i = 0; i < personVector.size(); i++) {
+        if (personVector.size() > donorPatientNumber.size()) {
+            fileOut << donorPatientNumber[i] << ",";
+        };
+        if (donorReportInfo.size() < 1) {
+            donorReportInfo.push_back("No report info");
+            fileOut << donorReportInfo[i] << "\n";
+        }
+    }
+
+
+
+    fileIn.close();
+    fileOut.close();
+
+    // removing the existing file
+    remove("pete_blood_donors_reports.csv");
+
+    // renaming the updated file with the existing file name
+    rename("pete_blood_donors_reports_new.csv", "pete_blood_donors_reports.csv");
+
+
+
+    return;
+}
+*/
+
 
 int main() {
 
 	string input;
 	int stringToInt = input[0] - 48;
-	
+
 
 	if (attempts > 3) { return 0; };
 
@@ -24,9 +169,9 @@ int main() {
 	cout << "1. A new or current donor\n";
 	cout << "2. A new or current recipient\n";
 	cout << "3. Staff\n";
-	int noOfOptions = 3;
-	getline(cin, input); 
-	validInputChecker(input, stringToInt, noOfOptions, attempts);
+	
+    getline(cin, input);
+    int noOfMenuOptions = 3; validInputChecker(input, stringToInt, noOfMenuOptions);
 	switch (stringToInt) {
 	case 1:
 		cout << "You have selected new or current donor" << endl;
@@ -43,97 +188,34 @@ int main() {
 		cout << "Any key you press will end program as this is out of pete's scope" << endl;
 		break;
 	case 3:
-		adminLogin(attempts);
+        cout << "You have selected Staff, Please enter Login, you have " << 3 - attempts << " remaining until you are locked out" << endl;
+        adminLogin(attempts);
 		if (attempts > 3) { return 0; };
-		adminMenu();
-		noOfOptions = 7;
-		cout << "Choose your option: " << endl;
-		cin.ignore(); getline(cin, input);
-		validInputChecker(input, stringToInt, noOfOptions, attempts);
-		switch (stringToInt) {
-		case 1:
-			cout << "1. View recipient information " << endl;
-			cout << "But nothing further has been implement, goodbye (press any key to exit) " << endl;
-			break;
-		case 2:
-			cout << "2. View donor information" << endl;
-			cout << "But nothing further has been implement, goodbye (press any key to exit) " << endl;
-			break;
-		case 3:
-			cout << "3. Report based on blood group" << endl;
-			cout << "But nothing further has been implement, goodbye (press any key to exit) " << endl;
-			break;
-		case 4:
-			cout << "4. Report based on location " << endl;
-			cout << "But nothing further has been implement, goodbye (press any key to exit) " << endl;
-			break;
-		case 5:
-			cout << "5. Recipient report" << endl;
-			cout << "But nothing further has been implement, goodbye (press any key to exit) " << endl;
-			break;
-		case 6:
-			cout << "6. Donor report " << endl;
-			cout << "But nothing further has been implement, goodbye (press any key to exit) " << endl;
-			break;
-		case 7:
-			cout << "7. Update donor's blood testing reports" << endl;
-			cout << "But nothing further has been implement, goodbye (press any key to exit) " << endl;
-			break;
-		}
+        noOfMenuOptions = 7; loggedInAdminOptions(input,stringToInt,noOfMenuOptions);
 	};
 
-
-
-
-	
-	//menu(input);
 
 
 	system("pause > 0");
 }
 
-//void menu(string& input, int& stringToInt) {
-//	cout << "Please choose and option :";
-//	cout << "\n1. Yes";
-//	cout << "\n2. No";
-//	cout << "\n3. Exit\n";
-//	
-//	getline(cin, input);
-//	validInputCheckerFromOneToNine(input, stringToInt);
-//	cout << "\nContinue to more things!\n";
-//
-//
-//	menu(input, stringToInt);
-//}
-
-//void validInputCheckerFromOneToNine(string& input, int& stringToInt) {
-//	if (stringToInt < 1 || stringToInt > 9 || input.size() > 1) { //errors if anything except numbers from 1-9 are entered.
-//	cout << "\"" << input << "\"" << "is not valid input, please try again entering a number from 1 to 0\n";
-//	menu(input, stringToInt);
-//	}
-//	else {
-//		cout << "\"" << stringToInt << "\"" << "is valid input, Please continue\n";
-//	}
-//}
-
-void validInputChecker(string& input, int& stringToInt, int& noOfOptions, int& attempts) {
-	stringToInt = input[0] - 48;
-	if (stringToInt < 1 || stringToInt > noOfOptions || input.size() > 1) {
-		cout << "\"" << input << "\"" << "is not valid input, you needed to enter a number from 1-" << noOfOptions <<"\n";
-		cout << "You're going to need to start again\n";
-		attempts = 0;
-		main();
+void validInputChecker(string& input, int& stringToInt, int& noOfMenuOptions) {
+    stringToInt = input[0] - 48;
+    if (stringToInt < 1 || stringToInt > noOfMenuOptions || input.size() > 1) {
+        cout << "\"" << input << "\"" << "is not valid input, you needed to enter a number from 1-" << noOfMenuOptions << "\n";
+        cout << "Please try again: ";
+        getline(cin, input);
+        validInputChecker(input, stringToInt, noOfMenuOptions);
 	}
 	else {
-		cout << "\"" << stringToInt << "\"" << "is valid input, Please continue\n";
+		cout << "\n\"" << stringToInt << "\"" << "is valid input, Please continue\n";
 	}
 }
 
 
 
-
 void adminLogin(int& attempts) {
-	cout << "You have selected Staff, Please enter Login" << endl;
+	cout << "You have " << 3-attempts << " remaining until you are locked out" << endl;
 	attempts++;
 	if (attempts > 3) {
 		cout << "\nThat is 3 failed attempts, program terminated" << endl;
@@ -155,13 +237,433 @@ void adminLogin(int& attempts) {
 
 }
 
-void adminMenu() {
-	cout << "1. View recipient information " << endl;
-	cout << "2. View donor information" << endl;
-	cout << "3. Report based on blood group" << endl;
-	cout << "4. Report based on location "<< endl;
-	cout << "5. Recipient report" << endl;
-	cout << "6. Donor report " << endl;
-	cout << "7. Update donor's blood testing reports" << endl;
+void loggedInAdminOptions(string& input, int& stringToInt, int& noOfMenuOptions) {
+    printAdminMenu();
+    cout << "\nChoose your option: " << endl;
+    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); getline(cin, input);
+    validInputChecker(input, stringToInt, noOfMenuOptions);
+    switch (stringToInt) {
+    case 1:
+        createDonor();
+        break;
+    case 2:
+        readDonorReport();
+        break;
+    case 3:
+        makeChangeDonor();
+        break;
+    case 4:
+        createRecipient();
+        break;
+    case 5:
+        readRecipientReport();
+        break;
+    case 6:
+        makeChangeRecipient();
+        break;
+    case 7:
+        //donorBloodTestReport();
+        cout << "nothing here for now";
+        break;
+    }
+}
+
+void createDonor() {
+    fstream fileIn;
+
+    vector<vector<string>> personVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    fileIn.open("pete_blood_donors.csv", ios::in);
+
+    while (getline(fileIn, line)) {
+        rowOfIndividualsInfo.clear();
+
+        stringstream str(line);
+
+        while (getline(str, word, ','))
+            rowOfIndividualsInfo.push_back(word);
+
+        personVector.push_back(rowOfIndividualsInfo);
+    }
+
+    fstream fileOut;
+
+    fileOut.open("pete_blood_donors.csv", ios::out | ios::app);
+    if (!fileOut) {
+        cout << "No files found\n";
+        return;
+    }
+    cout << "Enter name and bloodtype \n";
+
+
+
+
+    int donorNumber;
+    string name, bloodType;
+    cout << "Name :";
+    donorNumber = personVector.size() + 1;
+    cin >> name;
+    cout << "\nBloodtype :";
+    cin >> bloodType;
+
+
+    fileOut
+        << donorNumber << ","
+        << name << ","
+        << bloodType
+        << "\n";
+
+
+}
+void createRecipient() {
+    fstream fileIn;
+
+    vector<vector<string>> personVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    fileIn.open("pete_blood_recipients.csv", ios::in);
+
+    while (getline(fileIn, line)) {
+        rowOfIndividualsInfo.clear();
+
+        stringstream str(line);
+
+        while (getline(str, word, ','))
+            rowOfIndividualsInfo.push_back(word);
+
+        personVector.push_back(rowOfIndividualsInfo);
+    }
+
+    fstream fileOut;
+
+    fileOut.open("pete_blood_recipients.csv", ios::out | ios::app);
+    if (!fileOut) {
+        cout << "No files found\n";
+        return;
+    }
+    cout << "Enter name and bloodtype \n";
+
+
+
+
+    int donorNumber;
+    string name, bloodType;
+    cout << "Name :";
+    donorNumber = personVector.size() + 1;
+    cin >> name;
+    cout << "\nBloodtype :";
+    cin >> bloodType;
+
+
+    fileOut
+        << donorNumber << ","
+        << name << ","
+        << bloodType
+        << "\n";
+
+
+}
+
+void readDonorReport() {
+
+
+    fstream fileIn;
+
+
+    vector<vector<string>> personVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    fileIn.open("pete_blood_donors.csv", ios::in);
+
+    if (fileIn.is_open()) {
+
+        while (getline(fileIn, line)) {
+            rowOfIndividualsInfo.clear();
+
+            stringstream str(line);
+
+            while (getline(str, word, ','))
+                rowOfIndividualsInfo.push_back(word);
+
+            personVector.push_back(rowOfIndividualsInfo);
+        }
+    }
+    else {
+        cout << "No file found\n";
+    }
+
+
+
+    cout << "This is the data: \n";
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[j][i] << ",";
+        }
+        cout << endl;
+    }
+
+    cout << "\n\n";
+
+    return;
+}
+void readRecipientReport() {
+
+
+    fstream fileIn;
+
+
+    vector<vector<string>> personVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    fileIn.open("pete_blood_recipients.csv", ios::in);
+
+    if (fileIn.is_open()) {
+
+        while (getline(fileIn, line)) {
+            rowOfIndividualsInfo.clear();
+
+            stringstream str(line);
+
+            while (getline(str, word, ','))
+                rowOfIndividualsInfo.push_back(word);
+
+            personVector.push_back(rowOfIndividualsInfo);
+        }
+    }
+    else {
+        cout << "No file found\n";
+    }
+
+
+
+    cout << "This is the data: \n";
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[j][i] << ",";
+        }
+        cout << endl;
+    }
+
+    cout << "\n\n";
+
+    return;
+}
+
+void makeChangeDonor() {
+    fstream fileIn;
+
+
+    vector<vector<string>> personVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    //Assigning the file to read and flag
+    fileIn.open("pete_blood_donors.csv", ios::in); // ios in is to receive data from an external file
+
+    if (fileIn.is_open()) { //is open checks if the file is open or not
+        //WHile there is content to copy from fileIn to line, loop
+        while (getline(fileIn, line)) {
+            rowOfIndividualsInfo.clear();//get string of rowOfIndividualsInfo and remove all it's content
+
+            stringstream str(line); //sstream requires it's own pre-processor initialization. converfts file data to string format
+
+            //while there is content within the string, copy to WORD and stop at each comma
+            while (getline(str, word, ','))
+                rowOfIndividualsInfo.push_back(word); //appending content of var WORD into rowOfIndividualsInfo
+
+            personVector.push_back(rowOfIndividualsInfo); //Appending the rowOfIndividualsInfo content into CONTENT variable
+        }
+    }
+    else {
+        cout << "No file found\n";
+    }
+
+
+    cout << "This is the data: \n";
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[j][i] << ",";
+        }
+        cout << endl;
+    }
+
+
+
+    cout << "What would you like to change? person number: ";
+    int changerowOfIndividualsInfoChoice;
+    cin >> changerowOfIndividualsInfoChoice;
+    cout << "\nDetail number: ";
+    int changeColumnChoice;
+    cin >> changeColumnChoice;
+    cout << "\nTo What?: ";
+    string changeDataChoice;
+    cin >> changeDataChoice;
+
+
+    personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice - 1] = changeDataChoice;
+
+    cout << "The changed Datails : \n";
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[j][i] << ",";
+        }
+        cout << endl;
+    }
+
+    cout << "\n\n";
+
+
+    fstream fileOut;
+
+    // Create a new file to store updated data
+    fileOut.open("pete_blood_donorsnew.csv", ios::out);
+    if (!fileOut) {
+        cout << "No files found\n";
+        return;
+    }
+
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            fileOut << personVector[j][i] << ",";
+        }
+        fileOut << endl;
+    }
+
+
+    fileIn.close();
+    fileOut.close();
+
+    // removing the existing file
+    remove("pete_blood_donors.csv");
+
+    // renaming the updated file with the existing file name
+    rename("pete_blood_donorsnew.csv", "pete_blood_donors.csv");
+
+    return;
+}
+void makeChangeRecipient() {
+    fstream fileIn;
+
+
+    vector<vector<string>> personVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    //Assigning the file to read and flag
+    fileIn.open("pete_blood_recipients.csv", ios::in); // ios in is to receive data from an external file
+
+    if (fileIn.is_open()) { //is open checks if the file is open or not
+        //WHile there is content to copy from fileIn to line, loop
+        while (getline(fileIn, line)) {
+            rowOfIndividualsInfo.clear();//get string of rowOfIndividualsInfo and remove all it's content
+
+            stringstream str(line); //sstream requires it's own pre-processor initialization. converfts file data to string format
+
+            //while there is content within the string, copy to WORD and stop at each comma
+            while (getline(str, word, ','))
+                rowOfIndividualsInfo.push_back(word); //appending content of var WORD into rowOfIndividualsInfo
+
+            personVector.push_back(rowOfIndividualsInfo); //Appending the rowOfIndividualsInfo content into CONTENT variable
+        }
+    }
+    else {
+        cout << "No file found\n";
+    }
+
+
+    cout << "This is the data: \n";
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[j][i] << ",";
+        }
+        cout << endl;
+    }
+
+
+
+    cout << "What would you like to change? person number: ";
+    int changerowOfIndividualsInfoChoice;
+    cin >> changerowOfIndividualsInfoChoice;
+    cout << "\nDetail number: ";
+    int changeColumnChoice;
+    cin >> changeColumnChoice;
+    cout << "\nTo What?: ";
+    string changeDataChoice;
+    cin >> changeDataChoice;
+
+
+    personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice - 1] = changeDataChoice;
+
+    cout << "The changed Datails : \n";
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[j][i] << ",";
+        }
+        cout << endl;
+    }
+
+    cout << "\n\n";
+
+
+    fstream fileOut;
+
+    // Create a new file to store updated data
+    fileOut.open("pete_blood_recipients_new.csv", ios::out);
+    if (!fileOut) {
+        cout << "No files found\n";
+        return;
+    }
+
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            fileOut << personVector[j][i] << ",";
+        }
+        fileOut << endl;
+    }
+
+
+    fileIn.close();
+    fileOut.close();
+
+    // removing the existing file
+    remove("pete_blood_recipients.csv");
+
+    // renaming the updated file with the existing file name
+    rename("pete_blood_recipients_new.csv", "pete_blood_recipients.csv");
+
+    return;
+}
+
+
+void printAdminMenu() {
+    cout << "Please select your operation:" << endl;
+    cout << "1.Register Donor" << endl;
+    cout << "2.View donor report" << endl;
+    cout << "3.Make change to donor" << endl;
+    cout << "4.Register Recipient" << endl;
+    cout << "5.View Recipient Report" << endl;
+    cout << "6.Make change to recipient " << endl;
+    cout << "7. Update donor's blood testing reports" << endl;
+    //cout << "1. View recipient information " << endl;             enter patient number who's report you would like to view
+    //cout << "2. View donor information" << endl;                  enter patient number who's report you would like to view
+    //cout << "3. Report based on blood group" << endl;             Show all users of certian blood type
+    //cout << "4. Report based on location " << endl;               Show all users of a certian location
+    //cout << "5. Recipient report" << endl;                        done
+    //cout << "6. Donor report " << endl;                           done
+    //cout << "7. Update donor's blood testing reports" << endl;    make file called donor blood test reports, have it update from donor file, then choose which number to edit
+
 
 }
