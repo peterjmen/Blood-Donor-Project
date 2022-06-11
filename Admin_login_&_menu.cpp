@@ -10,9 +10,10 @@ int attempts = 0;
 
 //void menu(string& input, int& stringToInt);
 //void validInputCheckerFromOneToNine(string& input, int& stringToInt);
-void validInputChecker(string& input, int& stringToInt, int& noOfMenuOptions);
+//void validInputChecker(string& input, int& stringToInt, int& noOfMenuOptions);
 void adminLogin(int& attempts);
 
+void intInputChecker(int& inputToCheck, int maxAllowed);
 
 
 void createDonor();
@@ -25,7 +26,7 @@ void makeChangeDonor();
 void makeChangeRecipient();
 
 void printAdminMenu();
-void loggedInAdminOptions(string& input, int& stringToInt, int& noOfMenuOptions);
+void loggedInAdminOptions();
 
 void viewDonorBloodTestReports() {
 
@@ -89,7 +90,7 @@ void viewDonorBloodTestReports() {
     else {
         cout << "No file found\n";
     }
-    
+
 
     //vector<vector<string>> patientNumber;
     //vector<string> iDnum0Report1;
@@ -130,7 +131,7 @@ void viewDonorBloodTestReports() {
         fileOut << "No report entered" << "\n";
     }
 
-    
+
 
 
     //updating/appending done - stop here to print
@@ -273,10 +274,12 @@ void editDonorBloodTestReports() {
     cout << "Choose patient number to edit report: ";
     int n;
     cin >> n;
+    intInputChecker(n, patientNumber.size());
+
     cout << "Change the report to what? ";
     string reportUpdate;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); getline(cin, reportUpdate);cin.clear();
-    patientNumber[n-1][1] = reportUpdate; //-1 too offset 0 index
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); getline(cin, reportUpdate); cin.clear();
+    patientNumber[n - 1][1] = reportUpdate; //-1 too offset 0 index
 
 
 
@@ -327,10 +330,6 @@ void editDonorBloodTestReports() {
 
 int main() {
 
-    string input;
-    int stringToInt = input[0] - 48;
-
-
     if (attempts > 3) { return 0; };
 
     cout << "\tWelcome to the bloodbank\n\n";
@@ -339,9 +338,11 @@ int main() {
     cout << "2. A new or current recipient\n";
     cout << "3. Staff\n";
 
-    getline(cin, input);
-    int noOfMenuOptions = 3; validInputChecker(input, stringToInt, noOfMenuOptions);
-    switch (stringToInt) {
+    
+    int welcomeScreenChoice;
+    cin >> welcomeScreenChoice;
+    intInputChecker(welcomeScreenChoice, 3);
+    switch (welcomeScreenChoice) {
     case 1:
         cout << "You have selected new or current donor" << endl;
         cout << "Would you like to: \n";
@@ -360,8 +361,7 @@ int main() {
         cout << "You have selected Staff, Please enter Login, you have " << 3 - attempts << " remaining until you are locked out" << endl;
         adminLogin(attempts);
         if (attempts > 3) { return 0; };
-        cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        noOfMenuOptions = 9; loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
     };
 
 
@@ -373,18 +373,18 @@ int main() {
 
 
 
-void validInputChecker(string& input, int& stringToInt, int& noOfMenuOptions) {
-    stringToInt = input[0] - 48;
-    if (stringToInt < 1 || stringToInt > noOfMenuOptions || input.size() > 1) {
-        cout << "\"" << input << "\"" << "is not valid input, you needed to enter a number from 1-" << noOfMenuOptions << "\n";
-        cout << "Please try again: ";
-        getline(cin, input);
-        validInputChecker(input, stringToInt, noOfMenuOptions);
-    }
-    else {
-        cout << "\n\"" << stringToInt << "\"" << "is valid input, Please continue\n";
-    }
-}
+//void validInputChecker(string& input, int& stringToInt, int& noOfMenuOptions) {
+//    stringToInt = input[0] - 48;
+//    if (stringToInt < 1 || stringToInt > noOfMenuOptions || input.size() > 1) {
+//        cout << "\"" << input << "\"" << "is not valid input, you needed to enter a number from 1-" << noOfMenuOptions << "\n";
+//        cout << "Please try again: ";
+//        getline(cin, input);
+//        validInputChecker(input, stringToInt, noOfMenuOptions);
+//    }
+//    else {
+//        cout << "\n\"" << stringToInt << "\"" << "is valid input, Please continue\n";
+//    }
+//}
 
 void adminLogin(int& attempts) {
     cout << "You have " << 3 - attempts << " remaining until you are locked out" << endl;
@@ -409,45 +409,44 @@ void adminLogin(int& attempts) {
 
 }
 
-void loggedInAdminOptions(string& input, int& stringToInt, int& noOfMenuOptions) {
+void loggedInAdminOptions() {
     printAdminMenu();
     cout << "\nChoose your option: " << endl;
-    getline(cin, input);
-    validInputChecker(input, stringToInt, noOfMenuOptions);
-    switch (stringToInt) {
+    int adminMenuChoice;
+    cin >> adminMenuChoice;
+    intInputChecker(adminMenuChoice, 9);
+    switch (adminMenuChoice) {
     case 1:
         createDonor();
-        cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
         break;
     case 2:
         readDonorReport();
-        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
         break;
     case 3:
         makeChangeDonor();
-        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
         break;
     case 4:
         createRecipient();
-        cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
         break;
     case 5:
         readRecipientReport();
-        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
         break;
     case 6:
         makeChangeRecipient();
-        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
         break;
     case 7:
         viewDonorBloodTestReports();
-        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
         break;
-    case 8: 
+    case 8:
         editDonorBloodTestReports();
-        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        loggedInAdminOptions();
     case 9:
         return;
     }
@@ -681,14 +680,17 @@ void makeChangeDonor() {
         cout << endl;
     }
 
+  
 
 
     cout << "What would you like to change? person number: ";
     int changerowOfIndividualsInfoChoice;
     cin >> changerowOfIndividualsInfoChoice;
+    intInputChecker(changerowOfIndividualsInfoChoice, personVector.size());//-1 to offset 0 index
     cout << "\nDetail number: ";
     int changeColumnChoice;
     cin >> changeColumnChoice;
+    intInputChecker(changeColumnChoice, rowOfIndividualsInfo.size()); //-1 to offset 0 index
     cout << "\nTo What?: ";
     string changeDataChoice;
     cin >> changeDataChoice;
@@ -778,15 +780,19 @@ void makeChangeRecipient() {
 
 
 
+
     cout << "What would you like to change? person number: ";
     int changerowOfIndividualsInfoChoice;
     cin >> changerowOfIndividualsInfoChoice;
+    intInputChecker(changerowOfIndividualsInfoChoice, personVector.size());//-1 to offset 0 index
     cout << "\nDetail number: ";
     int changeColumnChoice;
     cin >> changeColumnChoice;
+    intInputChecker(changeColumnChoice, rowOfIndividualsInfo.size()); //-1 to offset 0 index
     cout << "\nTo What?: ";
     string changeDataChoice;
     cin >> changeDataChoice;
+
 
 
     personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice - 1] = changeDataChoice;
@@ -857,3 +863,12 @@ void printAdminMenu() {
 }
 
 
+void intInputChecker(int& inputToCheck, int maxAllowed) {
+    if (inputToCheck < 1 || inputToCheck > maxAllowed) {
+        cout << "Invalid input, please re-enter choice: ";
+        cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin >> inputToCheck;
+        intInputChecker(inputToCheck, maxAllowed);
+
+    }
+}
