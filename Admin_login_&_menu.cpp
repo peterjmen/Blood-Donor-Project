@@ -44,7 +44,7 @@ void viewDonorBloodTestReports() {
     //Assigning the file to read and flag
     fileIn.open("pete_blood_donors.csv", ios::in);
 
-    if (fileIn.is_open()) { 
+    if (fileIn.is_open()) {
         while (getline(fileIn, line)) {
             rowOfIndividualsInfo.clear();
             stringstream str(line);
@@ -94,7 +94,7 @@ void viewDonorBloodTestReports() {
     else {
         cout << "No file found\n";
     }
-    fileIn.close();
+    
 
     //vector<vector<string>> patientNumber;
     //vector<string> iDnum0Report1;
@@ -122,7 +122,7 @@ void viewDonorBloodTestReports() {
 
     fstream fileOut;
 
-    fileOut.open("pete_blood_donors_reports.csv", ios::out);
+    fileOut.open("pete_blood_donors_reports.csv", ios::app);
     if (!fileOut) {
         cout << "No files found\n";
         return;
@@ -131,11 +131,11 @@ void viewDonorBloodTestReports() {
     int patientNumberDifference = personVector.size() - patientNumber.size();
 
     for (int i = 0; i < patientNumberDifference; i++) {
-        fileOut << personVector[personVector.size()-patientNumberDifference+i][0] << ",";
+        fileOut << personVector[personVector.size() - patientNumberDifference + i][0] << ",";
         fileOut << "No report entered" << "\n";
     }
 
-    fileOut.close();
+    
 
 
     //updating/appending done - stop here to print
@@ -148,7 +148,8 @@ void viewDonorBloodTestReports() {
         cout << endl;
     }
 
-    return;
+    fileOut.close();
+    fileIn.close();
 }
 
 void editDonorBloodTestReports() {
@@ -202,7 +203,6 @@ void editDonorBloodTestReports() {
     else {
         cout << "No file found\n";
     }
-    fileIn.close();
 
     //vector<vector<string>> patientNumber;
     //vector<string> iDnum0Report1;
@@ -243,7 +243,7 @@ void editDonorBloodTestReports() {
         fileOut << "No report entered" << "\n";
     }
 
-    
+
 
 
     //updating/appending done - stop here to print
@@ -270,7 +270,7 @@ void editDonorBloodTestReports() {
 
     //make changes to vectors
 
-    
+
         //for (int i = 0; i < patientNumber.size(); i++) {
         //    fileOut << patientNumber[i][0] << ",";
         //    fileOut << patientNumber[i][1]<< "\n";
@@ -282,28 +282,28 @@ void editDonorBloodTestReports() {
     cout << "Change the report to what? ";
     string reportUpdate;
     cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); getline(cin, reportUpdate);
-    patientNumber[n][1] = reportUpdate;
+    patientNumber[n-1][1] = reportUpdate; //-1 too offset 0 index
 
 
 
     //populates file with changes
 
-        for (int j = 0; j < patientNumber.size(); j++) {
-            for (int i = 0; i < 2; i++) {
-                fileOutNew << patientNumber[j][i] << ",";
-            }
-            fileOutNew << endl;
+    for (int j = 0; j < patientNumber.size(); j++) {
+        for (int i = 0; i < 2; i++) {
+            fileOutNew << patientNumber[j][i] << ",";
         }
+        fileOutNew << endl;
+    }
 
-        //prints changes
+    //prints changes
 
-        cout << "Here are the changes";
-        for (int j = 0; j < patientNumber.size(); j++) {
-            for (int i = 0; i < iDnum0Report1.size(); i++) {
-                cout << patientNumber[j][i] << ",";
-            }
-            cout << endl;
+    cout << "Here are the changes";
+    for (int j = 0; j < patientNumber.size(); j++) {
+        for (int i = 0; i < iDnum0Report1.size(); i++) {
+            cout << patientNumber[j][i] << ",";
         }
+        cout << endl;
+    }
 
 
 
@@ -333,45 +333,45 @@ void editDonorBloodTestReports() {
 
 int main() {
 
-	string input;
-	int stringToInt = input[0] - 48;
+    string input;
+    int stringToInt = input[0] - 48;
 
 
-	if (attempts > 3) { return 0; };
+    if (attempts > 3) { return 0; };
 
-	cout << "\tWelcome to the bloodbank\n\n";
-	cout << "Are you:\n";
-	cout << "1. A new or current donor\n";
-	cout << "2. A new or current recipient\n";
-	cout << "3. Staff\n";
-	
+    cout << "\tWelcome to the bloodbank\n\n";
+    cout << "Are you:\n";
+    cout << "1. A new or current donor\n";
+    cout << "2. A new or current recipient\n";
+    cout << "3. Staff\n";
+
     getline(cin, input);
     int noOfMenuOptions = 3; validInputChecker(input, stringToInt, noOfMenuOptions);
-	switch (stringToInt) {
-	case 1:
-		cout << "You have selected new or current donor" << endl;
-		cout << "Would you like to: \n";
-		cout << "1. Login\n";
-		cout << "2. Register\n";
-		cout << "Any key you press will end program as this is out of pete's scope" << endl;
-		break;
-	case 2:
-		cout << "You have new or current recipient" << endl;
-		cout << "Would you like to: \n";
-		cout << "1. Login\n";
-		cout << "2. Register\n";
-		cout << "Any key you press will end program as this is out of pete's scope" << endl;
-		break;
-	case 3:
+    switch (stringToInt) {
+    case 1:
+        cout << "You have selected new or current donor" << endl;
+        cout << "Would you like to: \n";
+        cout << "1. Login\n";
+        cout << "2. Register\n";
+        cout << "Any key you press will end program as this is out of pete's scope" << endl;
+        break;
+    case 2:
+        cout << "You have new or current recipient" << endl;
+        cout << "Would you like to: \n";
+        cout << "1. Login\n";
+        cout << "2. Register\n";
+        cout << "Any key you press will end program as this is out of pete's scope" << endl;
+        break;
+    case 3:
         cout << "You have selected Staff, Please enter Login, you have " << 3 - attempts << " remaining until you are locked out" << endl;
         adminLogin(attempts);
-		if (attempts > 3) { return 0; };
-        noOfMenuOptions = 8; loggedInAdminOptions(input,stringToInt,noOfMenuOptions);
-	};
+        if (attempts > 3) { return 0; };
+        noOfMenuOptions = 8; loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+    };
 
 
 
-	system("pause > 0");
+    system("pause > 0");
 }
 
 
@@ -385,32 +385,32 @@ void validInputChecker(string& input, int& stringToInt, int& noOfMenuOptions) {
         cout << "Please try again: ";
         getline(cin, input);
         validInputChecker(input, stringToInt, noOfMenuOptions);
-	}
-	else {
-		cout << "\n\"" << stringToInt << "\"" << "is valid input, Please continue\n";
-	}
+    }
+    else {
+        cout << "\n\"" << stringToInt << "\"" << "is valid input, Please continue\n";
+    }
 }
 
 void adminLogin(int& attempts) {
-	cout << "You have " << 3-attempts << " remaining until you are locked out" << endl;
-	attempts++;
-	if (attempts > 3) {
-		cout << "\nThat is 3 failed attempts, program terminated" << endl;
-		return;
-	}
-	cout << "\nUsername: " << endl;
-	string userName;
-	cin >> userName;
-	cout << "\nPassword: " << endl;
-	string password;
-	cin >> password;
-	if (userName == "admin" && password == "admin") {
-		cout << "\nsuccess! You have access, here's the menu: " << endl;
-	}
-	else {
-		cout << "\n" << userName << " & " << password << " are not a valid username an password, please try again" << endl;
-		adminLogin(attempts);
-	}
+    cout << "You have " << 3 - attempts << " remaining until you are locked out" << endl;
+    attempts++;
+    if (attempts > 3) {
+        cout << "\nThat is 3 failed attempts, program terminated" << endl;
+        return;
+    }
+    cout << "\nUsername: " << endl;
+    string userName;
+    cin >> userName;
+    cout << "\nPassword: " << endl;
+    string password;
+    cin >> password;
+    if (userName == "admin" && password == "admin") {
+        cout << "\nsuccess! You have access, here's the menu: " << endl;
+    }
+    else {
+        cout << "\n" << userName << " & " << password << " are not a valid username an password, please try again" << endl;
+        adminLogin(attempts);
+    }
 
 }
 
@@ -782,7 +782,7 @@ void makeChangeRecipient() {
 
     personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice - 1] = changeDataChoice;
 
-    cout << "The changed Datails : \n";
+    cout << "The changed Details : \n";
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
@@ -845,3 +845,5 @@ void printAdminMenu() {
 
 
 }
+
+
