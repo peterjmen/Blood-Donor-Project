@@ -24,13 +24,8 @@ void readRecipientReport();
 void makeChangeDonor();
 void makeChangeRecipient();
 
-
 void printAdminMenu();
 void loggedInAdminOptions(string& input, int& stringToInt, int& noOfMenuOptions);
-
-
-
-
 
 void viewDonorBloodTestReports() {
 
@@ -59,14 +54,14 @@ void viewDonorBloodTestReports() {
     fileIn.close();
 
 
-    cout << "This is the data: \n";
+    //cout << "This is the data: \n";
 
-    for (int j = 0; j < personVector.size(); j++) {
-        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << personVector[j][i] << ",";
-        }
-        cout << endl;
-    }
+    //for (int j = 0; j < personVector.size(); j++) {
+    //    for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+    //        cout << personVector[j][i] << ",";
+    //    }
+    //    cout << endl;
+    //}
 
 
 
@@ -151,7 +146,6 @@ void viewDonorBloodTestReports() {
     fileOut.close();
     fileIn.close();
 }
-
 void editDonorBloodTestReports() {
 
     fstream fileIn;
@@ -281,7 +275,7 @@ void editDonorBloodTestReports() {
     cin >> n;
     cout << "Change the report to what? ";
     string reportUpdate;
-    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); getline(cin, reportUpdate);
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); getline(cin, reportUpdate);cin.clear();
     patientNumber[n-1][1] = reportUpdate; //-1 too offset 0 index
 
 
@@ -366,7 +360,8 @@ int main() {
         cout << "You have selected Staff, Please enter Login, you have " << 3 - attempts << " remaining until you are locked out" << endl;
         adminLogin(attempts);
         if (attempts > 3) { return 0; };
-        noOfMenuOptions = 8; loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+        cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        noOfMenuOptions = 9; loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
     };
 
 
@@ -417,32 +412,46 @@ void adminLogin(int& attempts) {
 void loggedInAdminOptions(string& input, int& stringToInt, int& noOfMenuOptions) {
     printAdminMenu();
     cout << "\nChoose your option: " << endl;
-    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); getline(cin, input);
+    getline(cin, input);
     validInputChecker(input, stringToInt, noOfMenuOptions);
     switch (stringToInt) {
     case 1:
         createDonor();
+        cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
         break;
     case 2:
         readDonorReport();
+        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
         break;
     case 3:
         makeChangeDonor();
+        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
         break;
     case 4:
         createRecipient();
+        cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
         break;
     case 5:
         readRecipientReport();
+        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
         break;
     case 6:
         makeChangeRecipient();
+        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
         break;
     case 7:
         viewDonorBloodTestReports();
+        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
         break;
-    case 8: editDonorBloodTestReports();
+    case 8: 
+        editDonorBloodTestReports();
+        loggedInAdminOptions(input, stringToInt, noOfMenuOptions);
+    case 9:
+        return;
     }
+
 }
 
 void createDonor() {
@@ -826,7 +835,7 @@ void makeChangeRecipient() {
 
 
 void printAdminMenu() {
-    cout << "Please select your operation:" << endl;
+    cout << "\n\nPlease select your operation:" << endl;
     cout << "1.Register Donor" << endl;
     cout << "2.View donor report" << endl;
     cout << "3.Make change to donor" << endl;
@@ -834,7 +843,8 @@ void printAdminMenu() {
     cout << "5.View Recipient Report" << endl;
     cout << "6.Make change to recipient " << endl;
     cout << "7. View donor's blood testing reports" << endl;
-    cout << "8. Update donor's blood testing reports" << endl;
+    cout << "8. Update donor's blood testing report" << endl;
+    cout << "9. Exit" << endl;
     //cout << "1. View recipient information " << endl;             enter patient number who's report you would like to view
     //cout << "2. View donor information" << endl;                  enter patient number who's report you would like to view
     //cout << "3. Report based on blood group" << endl;             Show all users of certian blood type
