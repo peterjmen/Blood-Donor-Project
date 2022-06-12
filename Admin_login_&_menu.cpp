@@ -137,12 +137,26 @@ void viewDonorBloodTestReports() {
     //updating/appending done - stop here to print
     /// i .e cout loop
 
+    cout << "This is the data: \n\n";
+    cout << "********************DONOR BLOOD TEST RESULTS REPORT*******************\n";
+    cout << "Patient #\t" << "Report:\t\t\n";
+
+
     for (int j = 0; j < patientNumber.size(); j++) {
         for (int i = 0; i < iDnum0Report1.size(); i++) {
-            cout << patientNumber[j][i] << ",";
+            cout << patientNumber[j][i] << "\t\t";
         }
         cout << endl;
     }
+    cout << "********************DONOR BLOOD TEST RESULTS REPORT*******************\n\n";
+
+
+
+
+
+
+
+
 
     fileOut.close();
     fileIn.close();
@@ -244,12 +258,21 @@ void editDonorBloodTestReports() {
     //updating/appending done - stop here to print
     /// i .e cout loop
 
+
+    cout << "This is the data: \n\n";
+    cout << "********************DONOR BLOOD TEST RESULTS REPORT*******************\n";
+    cout << "Patient #\t" << "Report:\t\t\n";
+
+
     for (int j = 0; j < patientNumber.size(); j++) {
         for (int i = 0; i < iDnum0Report1.size(); i++) {
-            cout << patientNumber[j][i] << ",";
+            cout << patientNumber[j][i] << "\t\t";
         }
         cout << endl;
     }
+    cout << "********************DONOR BLOOD TEST RESULTS REPORT*******************\n\n";
+
+
 
 
     //Old file printed now to change and print new data
@@ -294,14 +317,14 @@ void editDonorBloodTestReports() {
 
     //prints changes
 
-    cout << "Here are the changes";
-    for (int j = 0; j < patientNumber.size(); j++) {
-        for (int i = 0; i < iDnum0Report1.size(); i++) {
-            cout << patientNumber[j][i] << ",";
-        }
-        cout << endl;
-    }
 
+
+    cout << "The changed Details : \n";
+    cout << "********************DETAILS CHANGE REPORT*******************\n";
+    cout << "Patient #\t" << "Report:\t\t\n";
+    cout << n  << "\t\t" << patientNumber[n-1][1]; // -1 to offset 0 index
+
+    cout << "\n********************CHANGE REPORT END*******************\n\n";
 
 
 
@@ -358,7 +381,7 @@ int main() {
         cout << "Any key you press will end program as this is out of pete's scope" << endl;
         break;
     case 3:
-        cout << "You have selected Staff, Please enter Login, you have " << 3 - attempts << " remaining until you are locked out" << endl;
+        cout << "You have selected Staff, Please enter Login, you have " << 3 - attempts << " attempts to log in or the program will terminate" << endl;
         adminLogin(attempts);
         if (attempts > 3) { return 0; };
         loggedInAdminOptions();
@@ -387,7 +410,9 @@ int main() {
 //}
 
 void adminLogin(int& attempts) {
-    cout << "You have " << 3 - attempts << " remaining until you are locked out" << endl;
+    if (attempts > 0) {
+        cout << "You have " << 3 - attempts << " remaining until you are locked out" << endl;
+    }
     attempts++;
     if (attempts > 3) {
         cout << "\nThat is 3 failed attempts, program terminated" << endl;
@@ -411,7 +436,7 @@ void adminLogin(int& attempts) {
 
 void loggedInAdminOptions() {
     printAdminMenu();
-    cout << "\nChoose your option: " << endl;
+    cout << "\nChoose your option: ";
     int adminMenuChoice;
     cin >> adminMenuChoice;
     intInputChecker(adminMenuChoice, 9);
@@ -447,7 +472,10 @@ void loggedInAdminOptions() {
     case 8:
         editDonorBloodTestReports();
         loggedInAdminOptions();
+        break;
     case 9:
+        cout << "\n\nYou have chosen exit, Goodbye" << endl;
+        cout << "\n\nPress any key to terminate program\n\n";
         return;
     }
 
@@ -573,7 +601,7 @@ void readDonorReport() {
 
             while (getline(str, word, ','))
                 rowOfIndividualsInfo.push_back(word);
-
+            cout << "Patient #\t" << "Report:\t\t\n";
             personVector.push_back(rowOfIndividualsInfo);
         }
     }
@@ -583,16 +611,18 @@ void readDonorReport() {
 
 
 
-    cout << "This is the data: \n";
+    cout << "This is the data: \n\n";
+    cout << "********************DONOR REPORT*******************\n";
+    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\n";
+
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << personVector[j][i] << ",";
+            cout << personVector[j][i] << "\t\t";
         }
         cout << endl;
     }
-
-    cout << "\n\n";
+    cout << "********************DONOR END*******************\n\n";
 
     return;
 }
@@ -627,16 +657,19 @@ void readRecipientReport() {
 
 
 
-    cout << "This is the data: \n";
+    cout << "This is the data: \n\n";
+    cout << "********************RECIPIENT REPORT*******************\n";
+    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\n";
+
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << personVector[j][i] << ",";
+            cout << personVector[j][i] << "\t\t";
         }
         cout << endl;
     }
-
-    cout << "\n\n";
+    cout << "********************RECIPIENT REPORT END*******************\n\n";
+    
 
     return;
 }
@@ -671,43 +704,46 @@ void makeChangeDonor() {
     }
 
 
-    cout << "This is the data: \n";
+
+    cout << "\n\n********************DONOR REPORT*******************\n";
+    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\n";
+
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << personVector[j][i] << ",";
+            cout << personVector[j][i] << "\t\t";
         }
         cout << endl;
     }
+    cout << "********************DONOR END*******************\n\n";
 
-  
-
-
-    cout << "What would you like to change? person number: ";
+    cout << "Who's data would you like to change? Enter person ID number: ";
     int changerowOfIndividualsInfoChoice;
     cin >> changerowOfIndividualsInfoChoice;
-    intInputChecker(changerowOfIndividualsInfoChoice, personVector.size());//-1 to offset 0 index
-    cout << "\nDetail number: ";
+    intInputChecker(changerowOfIndividualsInfoChoice, personVector.size());
+    cout << "\nWhat type of information of theirs would you like to chagne?: ";
+    cout << "\n1. Name: ";
+    cout << "\n2. Bloodtype: ";
+    
     int changeColumnChoice;
     cin >> changeColumnChoice;
-    intInputChecker(changeColumnChoice, rowOfIndividualsInfo.size()); //-1 to offset 0 index
+    intInputChecker(changeColumnChoice, rowOfIndividualsInfo.size()-1);// -1 due to making patient number inaccessible to change
     cout << "\nTo What?: ";
     string changeDataChoice;
     cin >> changeDataChoice;
 
 
-    personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice - 1] = changeDataChoice;
+    personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice] = changeDataChoice;//-1 to offset 0 index for patient number
 
-    cout << "The changed Datails : \n";
+    cout << "The changed Details : \n";
+    cout << "********************DETAILS CHANGE REPORT*******************\n";
+    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\n";
 
-    for (int j = 0; j < personVector.size(); j++) {
-        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << personVector[j][i] << ",";
+
+    for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[changerowOfIndividualsInfoChoice-1][i] << "\t\t";
         }
-        cout << endl;
-    }
-
-    cout << "\n\n";
+    cout << "\n********************CHANGE REPORT END*******************\n\n";
 
 
     fstream fileOut;
@@ -737,6 +773,8 @@ void makeChangeDonor() {
     // renaming the updated file with the existing file name
     rename("pete_blood_donorsnew.csv", "pete_blood_donors.csv");
 
+
+    cout << "Action complete, returning to main admin menu";
     return;
 }
 void makeChangeRecipient() {
@@ -781,32 +819,46 @@ void makeChangeRecipient() {
 
 
 
-    cout << "What would you like to change? person number: ";
+    cout << "\n\n********************RECIPIENT REPORT*******************\n";
+    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\n";
+
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << personVector[j][i] << "\t\t";
+        }
+        cout << endl;
+    }
+    cout << "********************RECIPIENT REPORT END*******************\n\n";
+
+    cout << "Who's data would you like to change? Enter person ID number: ";
     int changerowOfIndividualsInfoChoice;
     cin >> changerowOfIndividualsInfoChoice;
-    intInputChecker(changerowOfIndividualsInfoChoice, personVector.size());//-1 to offset 0 index
-    cout << "\nDetail number: ";
+    intInputChecker(changerowOfIndividualsInfoChoice, personVector.size());
+    cout << "\nWhat type of information of theirs would you like to chagne?: ";
+    cout << "\n1. Name: ";
+    cout << "\n2. Bloodtype: ";
+
     int changeColumnChoice;
     cin >> changeColumnChoice;
-    intInputChecker(changeColumnChoice, rowOfIndividualsInfo.size()); //-1 to offset 0 index
+    intInputChecker(changeColumnChoice, rowOfIndividualsInfo.size() - 1);// -1 due to making patient number inaccessible to change
     cout << "\nTo What?: ";
     string changeDataChoice;
     cin >> changeDataChoice;
 
 
-
-    personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice - 1] = changeDataChoice;
+    personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice] = changeDataChoice;//-1 to offset 0 index for patient number
 
     cout << "The changed Details : \n";
+    cout << "********************DETAILS CHANGE REPORT*******************\n";
+    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\n";
 
-    for (int j = 0; j < personVector.size(); j++) {
-        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << personVector[j][i] << ",";
-        }
-        cout << endl;
+
+    for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+        cout << personVector[changerowOfIndividualsInfoChoice - 1][i] << "\t\t";
     }
+    cout << "\n********************CHANGE REPORT END*******************\n\n";
 
-    cout << "\n\n";
 
 
     fstream fileOut;
@@ -842,12 +894,12 @@ void makeChangeRecipient() {
 
 void printAdminMenu() {
     cout << "\n\nPlease select your operation:" << endl;
-    cout << "1.Register Donor" << endl;
-    cout << "2.View donor report" << endl;
-    cout << "3.Make change to donor" << endl;
-    cout << "4.Register Recipient" << endl;
-    cout << "5.View Recipient Report" << endl;
-    cout << "6.Make change to recipient " << endl;
+    cout << "1. Register Donor" << endl;
+    cout << "2. View donor report" << endl;
+    cout << "3. Make change to donor" << endl;
+    cout << "4. Register Recipient" << endl;
+    cout << "5. View Recipient Report" << endl;
+    cout << "6. Make change to recipient " << endl;
     cout << "7. View donor's blood testing reports" << endl;
     cout << "8. Update donor's blood testing report" << endl;
     cout << "9. Exit" << endl;
