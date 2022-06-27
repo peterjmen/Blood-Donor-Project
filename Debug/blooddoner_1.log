@@ -1,0 +1,32 @@
+﻿  blooddoner_1.cpp
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(279,13): warning C4129: 'L': unrecognized character escape sequence
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(419,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(420,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(617,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(634,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(635,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(693,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(694,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(738,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1044,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1045,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1101,13): warning C4129: 'L': unrecognized character escape sequence
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1154,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1155,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1319,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1336,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1337,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1468,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1469,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1582,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1685,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1688,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1740,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1743,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1803,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1857,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1908,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1911,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1962,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\270122273\source\repos\blooddoner_1\blooddoner_1\blooddoner_1.cpp(1965,31): warning C4018: '<': signed/unsigned mismatch
+  blooddoner_1.vcxproj -> C:\Users\270122273\source\repos\blooddoner_1\Debug\blooddoner_1.exe
