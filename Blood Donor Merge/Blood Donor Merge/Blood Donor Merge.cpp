@@ -75,9 +75,9 @@ void locationReport();
 void recipientLogin(int& loggedInIdNumber, int attempts);
 void createRecipient(int& loggedInIdNumber);
 void loggedInRecipientSwitchStatement();
-void printLoggedInRecipientMenu();
+void printLoggedInRecipientMenu(string firstName, string lastName);
 void makeChangeRecipient();
-
+void recipientDonorReport(int filterType, string bloodType, string location);
 
 
 //**** Ella
@@ -1012,9 +1012,9 @@ void readDonorReport() {
 
 void createRecipient() {
 
+
     fstream fileIn;
 
-    //reading file to count number of lines to create primary key for recipients
     fileIn.open("blood_recipients.csv", ios::in);
     if (!fileIn) {
         cout << "No files found\n";
@@ -1032,7 +1032,6 @@ void createRecipient() {
 
     fileIn.close();
 
-
     fstream fileOut;
 
     fileOut.open("blood_recipients.csv", ios::out | ios::app);
@@ -1040,31 +1039,50 @@ void createRecipient() {
         cout << "No files found\n";
         return;
     }
-
-
-    cout << "Enter name, bloodtype and location \n";
+    cout << "Enter details\n";
 
     int recipientNumber;
-    string name, bloodType, location;
-    cout << "Name :";
-    recipientNumber = rowCount + 1; //+1 as first number starts at 1 rather than 0
-    cin.ignore(); //cin.ignore to prevent any left over "\n's" in the buffer preventing unintention input "spill over" or "leak through"
-    getline(cin, name); // Getline to take the whole input as a string - incase of person entering two things such as first and second name
-    cout << "\nBloodtype :";
+    string username, password, firstName, lastName, bloodType, location, email, contactNumber;
+
+    recipientNumber = rowCount + 1; //+1 to offset 0
+    cout << "Username : ";
+    cin.ignore(); getline(cin, username);
+    cout << "Password : ";
+    getline(cin, password);
+    cout << "First Name : ";
+    getline(cin, firstName);
+    cout << "\nLast Name : ";
+    getline(cin, lastName);
+    cout << "\nBloodtype : ";
     getline(cin, bloodType);
-    cout << "\Location :";
+    cout << "\nEmail : ";
+    getline(cin, email);
+    cout << "\nContact Number : ";
+    getline(cin, contactNumber);
+    cout << "\Location : ";
     getline(cin, location);
+
 
 
     fileOut
         << recipientNumber << ","
-        << name << ","
+        << firstName << ","
+        << lastName << ","
         << bloodType << ","
-        << location
+        << email << ","
+        << contactNumber << ","
+        << location << ","
+        << username << ","
+        << password << ","
         << "\n";
 
-    cout << "Recipient added, press any key to return to admin menu";
+    fileOut.close();
+
+    loggedInIdNumber = recipientNumber;
+
+    cout << "Recipient added, press any key to go to logged in menu\n\n";
     system("pause > 0");
+    return;
 }
 
 
@@ -1102,15 +1120,16 @@ void readRecipientReport() {
 
     cout << "This is the data: \n\n";
     cout << "********************RECIPIENT REPORT*******************\n";
-    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\t\t" << "Location\n";
+    cout << left << setfill(' ') << setw(15) << "Patient #" << left << setfill(' ') << setw(15) << "First Name" << left << setfill(' ') << setw(15) << "Last Name" << left << setfill(' ') << setw(15) << "Blood Type" << left << setfill(' ') << setw(15) << "Email" << left << setfill(' ') << setw(15) << "Phone Number" << left << setfill(' ') << setw(15) << "Location" << left << setfill(' ') << setw(15) << "Account details\n" << left << setfill(' ') << setw(15) << endl;
 
 
-    for (int j = 0; j < personVector.size(); j++) {
-        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << personVector[j][i] << "\t\t";
+        for (int j = 0; j < personVector.size(); j++) {
+            for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+                cout << left << setfill(' ') << setw(15) << personVector[j][i];
+            }
+            cout << endl;
         }
-        cout << endl;
-    }
+
     cout << "********************RECIPIENT REPORT END*******************\n\n";
     cout << "Press any key to return to admin menu";
     system("pause > 0");
@@ -1981,26 +2000,62 @@ void createRecipient(int& loggedInIdNumber) {
 
 
 void loggedInRecipientSwitchStatement() {
-    printLoggedInRecipientMenu();
+    fstream fileIn;
+
+    vector<vector<string>> recipientVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    //Assigning the file to read and flag
+    fileIn.open("blood_recipients.csv", ios::in); // ios in is to receive data from an external file
+
+    if (fileIn.is_open()) { //is open checks if the file is open or not
+        //While there is content to copy from fileIn to line, loop
+        while (getline(fileIn, line)) { //getline is needed to get the whole line and assign it to the variable "line"
+            rowOfIndividualsInfo.clear();//get string of rowOfIndividualsInfo and remove all it's content
+
+            stringstream str(line); //sstream required to take each "line" and essentially concatenate them together for one large string, without the problem of lines being broke up by newlines
+
+            //while there is content within the string, copy to WORD and stop at each comma
+            while (getline(str, word, ','))
+                rowOfIndividualsInfo.push_back(word); //appending content of var WORD into rowOfIndividualsInfo
+
+            recipientVector.push_back(rowOfIndividualsInfo); //Appending the rowOfIndividualsInfo content into CONTENT variable
+        }
+    }
+    else {
+        cout << "No file found\n";
+    }
+
+
+    //sends uses name to the login menu
+    string recipientFirstName = recipientVector[loggedInIdNumber - 1][1];  
+    string recipientLastName = recipientVector[loggedInIdNumber - 1][2];
+    printLoggedInRecipientMenu(recipientFirstName , recipientLastName);
+
+    string bloodType = recipientVector[loggedInIdNumber - 1][3];
+    string location = recipientVector[loggedInIdNumber - 1][6];
+
+
     cout << "\nChoose your option: ";
     int recipientChoice;
     cin >> recipientChoice;
-    intInputChecker(recipientChoice, 1, 4);
+    intInputChecker(recipientChoice, 1, 5);
     switch (recipientChoice) {
     case 1:
         cout << "View Donors by matching blood type\n\n";
-
+        recipientDonorReport(recipientChoice, bloodType, location);
 
        loggedInRecipientSwitchStatement();
         break;
     case 2:
         cout << "View Donors by matching blood type and location\n";
-
+        recipientDonorReport(recipientChoice, bloodType, location);
         loggedInRecipientSwitchStatement();
         break;
     case 3:
         cout << "View Donors By name\n" << endl;
-
+        recipientDonorReport(recipientChoice, bloodType, location);
         loggedInRecipientSwitchStatement();
         break;
 
@@ -2025,12 +2080,14 @@ void loggedInRecipientSwitchStatement() {
 }
 
 
-void printLoggedInRecipientMenu() {
+void printLoggedInRecipientMenu(string firstName, string lastName) {
     system("cls");
     cout << "\t\t************************\n";
     cout << "\t\t*Recipient Account Menu*\n";
     cout << "\t\t************************\n\n";
 
+
+    cout << "\n\nLogged in as: " << firstName << " " << lastName;
 
     cout << "\n\nWelcome to the Recipient menu! \n\nWhat would you like to do?: \n\n";
     cout << "\t1. View Donors by matching blood type" << endl;
@@ -2166,7 +2223,134 @@ void makeChangeRecipient() {
     return;
 }
 
+void recipientDonorReport(int filterType, string bloodType, string location) {
 
+
+    fstream fileIn;
+    vector<vector<string>> personVector; // Vector of entities (persons), vector containing vector of attributes
+    vector<string> rowOfIndividualsInfo; // Vector of attributes/columns containing strings
+    string line, word;
+
+    fileIn.open("blood_donors.csv", ios::in); // ios in is to receive data from an external file
+
+    if (fileIn.is_open()) { //is open checks if the file is open or not
+        //While there is content to copy from fileIn to line, loop
+        while (getline(fileIn, line)) { //getline is needed to get the whole line and assign it to the variable "line"
+            rowOfIndividualsInfo.clear();//get string of rowOfIndividualsInfo and remove all it's content
+
+            stringstream str(line); //sstream required to take each "line" and essentially concatenate them together for one large string, without the problem of lines being broke up by newlines
+
+            //while there is content within the string, copy to WORD and stop at each comma
+            while (getline(str, word, ','))
+                rowOfIndividualsInfo.push_back(word); //appending content of var WORD into rowOfIndividualsInfo
+
+            personVector.push_back(rowOfIndividualsInfo); //Appending the rowOfIndividualsInfo content into CONTENT variable
+        }
+    }
+    else {
+        cout << "No file found\n";
+    }
+
+    system("cls");
+
+  
+
+   
+    string donorBloodTypes;
+    string donorLocations;
+    //prints the donor data based on the selected filter type
+    switch (filterType) {
+    case 1:
+
+        cout << "\n\nViewing All donors with matching blood types to your own: \t Your Blood type is " << bloodType << "\n\n\n";
+
+        cout << "This is the data: \n\n";
+        cout << "********************DONOR REPORT*******************\n";
+        cout << left << setfill(' ') << setw(15) << "Patient #" << left << setfill(' ') << setw(15) << "First Name" << left << setfill(' ') << setw(15) << "Last Name" << left << setfill(' ') << setw(15) << "Gender" << left << setfill(' ') << setw(15) << "Blood Type" << left << setfill(' ') << setw(15) << "Last Donation" << left << setfill(' ') << setw(15) << "Location" << endl;
+
+        cout << "\n";
+        for (int j = 0; j < personVector.size(); j++) {
+            donorBloodTypes = personVector[j][7];
+
+
+            if (donorBloodTypes == bloodType){
+                for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+                    if (i != 3 && i != 4 && i != 5 && i != 9 && i != 10 && i != 11 && i != 13 && i != 14) {
+                        cout << left << setfill(' ') << setw(15) << personVector[j][i];
+                    }
+                }
+            cout << endl;
+        }
+        }
+
+        break;
+    case 2:
+
+        cout << "\n\nViewing All donors with matching blood type AND location to your own: \t \nYour Blood type is " << bloodType << " and your location is " << location <<"\n\n\n";
+
+        cout << "This is the data: \n\n";
+        cout << "********************DONOR REPORT*******************\n";
+        cout << left << setfill(' ') << setw(15) << "Patient #" << left << setfill(' ') << setw(15) << "First Name" << left << setfill(' ') << setw(15) << "Last Name" << left << setfill(' ') << setw(15) << "Gender" << left << setfill(' ') << setw(15) << "Blood Type" << left << setfill(' ') << setw(15) << "Last Donation" << left << setfill(' ') << setw(15) << "Location" << endl;
+
+        cout << "\n";
+        for (int j = 0; j < personVector.size(); j++) {
+            donorLocations = personVector[j][12];
+            donorBloodTypes = personVector[j][7];
+
+
+            if (donorBloodTypes == bloodType && donorLocations == location) {
+                for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+                    if (i != 3 && i != 4 && i != 5 && i != 9 && i != 10 && i != 11 && i != 13 && i != 14) {
+                        cout << left << setfill(' ') << setw(15) << personVector[j][i];
+                    }
+                }
+                cout << endl;
+            }
+        }
+
+        break;
+    case 3:
+
+        cout << "\n\nViewing All donors with matching blood types to your own: \t Your Blood type is " << bloodType << "\n\n\n";
+
+        cout << "This is the data: \n\n";
+        cout << "********************DONOR REPORT*******************\n";
+        cout << left << setfill(' ') << setw(15) << "Patient #" << left << setfill(' ') << setw(15) << "First Name" << left << setfill(' ') << setw(15) << "Last Name" << left << setfill(' ') << setw(15) << "Gender" << left << setfill(' ') << setw(15) << "Blood Type" << left << setfill(' ') << setw(15) << "Last Donation" << left << setfill(' ') << setw(15) << "Location" << endl;
+
+        cout << "\n";
+        for (int j = 0; j < personVector.size(); j++) {
+            donorBloodTypes = personVector[j][7];
+
+
+            if (donorBloodTypes == bloodType) {
+                for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+                    if (i != 3 && i != 4 && i != 5 && i != 9 && i != 10 && i != 11 && i != 13 && i != 14) {
+                        cout << left << setfill(' ') << setw(15) << personVector[j][i];
+                    }
+                }
+                cout << endl;
+            }
+        }
+
+        break;
+
+
+
+
+
+
+    }
+
+    
+
+ 
+    cout << "********************DONOR END*******************\n\n";
+    cout << "Enter anything to return to menu";
+   
+    system("pause > 0");
+
+    return;
+}
 
 
 
