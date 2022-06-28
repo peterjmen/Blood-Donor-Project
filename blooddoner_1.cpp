@@ -757,47 +757,6 @@ void donorLogin(int& loggedInIdNumber, int attempts) {
 
 }
 
-/*
-
-
-//make vector from file
-//change vector
-
-int input 1 - 31;
-if (2dvector[input][6] != "Open") {
-    cout << "that slot is taken, please choose another"
-        //menu function
-}
-else {
-    rowsOfColumns[input][bookingColumnNumber] = "Booked";
-    cout << int input is now booked by you
-}
-
-
-//cout change
-//file out vector
-
-save current vector as ...new
-
-delete old file
-
-rename new file to old file
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-/// //*****Pete
-
-
 
 void adminLogin(int& attempts) {
     if (attempts > 0) {
@@ -1044,13 +1003,13 @@ void readDonorReport() {
 
     cout << "This is the data: \n\n";
     cout << "********************DONOR REPORT*******************\n";
-    cout << left << setfill('.') << setw(20) << "Patient #" << left << setfill('.') << setw(20) << "Name" << left << setfill('.') << setw(20) << "Bloodtype" << left << setfill('.') << setw(20) << "Location" << endl;
+    cout << left << setfill(' ') << setw(15) << "Patient #" << left << setfill(' ') << setw(15) << "Name" << left << setfill(' ') << setw(15) << "Bloodtype" << left << setfill(' ') << setw(15) << "ethnicity"  << left << setfill(' ') << setw(15) << "" << endl;
 
 
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << left << setfill('.') << setw(20) << personVector[j][i];
+            cout << left << setfill(' ') << setw(15) << personVector[j][i];
         }
         cout << endl;
     }
@@ -1067,7 +1026,7 @@ void createRecipient() {
     fstream fileIn;
 
     //reading file to count number of lines to create primary key for recipients
-    fileIn.open("pete_blood_recipients.csv", ios::in);
+    fileIn.open("blood_recipients.csv", ios::in);
     if (!fileIn) {
         cout << "No files found\n";
         return;
@@ -1085,10 +1044,9 @@ void createRecipient() {
     fileIn.close();
 
 
-
     fstream fileOut;
 
-    fileOut.open("pete_blood_recipients.csv", ios::out | ios::app);
+    fileOut.open("blood_recipients.csv", ios::out | ios::app);
     if (!fileOut) {
         cout << "No files found\n";
         return;
@@ -1132,7 +1090,7 @@ void readRecipientReport() {
     vector<string> rowOfIndividualsInfo;
     string line, word;
 
-    fileIn.open("pete_blood_recipients.csv", ios::in);
+    fileIn.open("blood_recipients.csv", ios::in);
 
     if (fileIn.is_open()) {
 
@@ -1277,7 +1235,7 @@ void makeChangeRecipient() {
     string line, word;
 
     //Assigning the file to read and flag
-    fileIn.open("pete_blood_recipients.csv", ios::in); // ios in is to receive data from an external file
+    fileIn.open("blood_recipients.csv", ios::in); // ios in is to receive data from an external file
 
     if (fileIn.is_open()) { //is open checks if the file is open or not
         //WHile there is content to copy from fileIn to line, loop
@@ -1333,7 +1291,7 @@ void makeChangeRecipient() {
     fstream fileOut;
 
     // Create a new file to store updated data
-    fileOut.open("pete_blood_recipients_new.csv", ios::out);
+    fileOut.open("blood_recipients_new.csv", ios::out);
     if (!fileOut) {
         cout << "No files found\n";
         return;
@@ -1352,10 +1310,10 @@ void makeChangeRecipient() {
     fileOut.close();
 
     // removing the existing file
-    remove("pete_blood_recipients.csv");
+    remove("blood_recipients.csv");
 
     // renaming the updated file with the existing file name
-    rename("pete_blood_recipients_new.csv", "pete_blood_recipients.csv");
+    rename("blood_recipients_new.csv", "blood_recipients.csv");
 
 
     cout << "Data changed, press any key to return to admin menu";
@@ -1713,7 +1671,7 @@ void locationReport() { //identical to blood group, however index is 3 becuase l
 
     ////recipients
 
-    fileIn.open("pete_blood_recipients.csv", ios::in);
+    fileIn.open("blood_recipients.csv", ios::in);
 
 
     vector<vector<string>> recipientPersonVector;
@@ -1776,7 +1734,7 @@ void viewRecipientInformation() {
     vector<string> rowOfIndividualsInfo;
     string line, word;
 
-    fileIn.open("pete_blood_recipients.csv", ios::in);
+    fileIn.open("blood_recipients.csv", ios::in);
 
     if (fileIn.is_open()) {
 
@@ -1935,7 +1893,7 @@ void bloodGroupReport() {
     ////recipients
 
 
-    fileIn.open("pete_blood_recipients.csv", ios::in);
+    fileIn.open("blood_recipients.csv", ios::in);
 
 
     vector<vector<string>> recipientPersonVector;
