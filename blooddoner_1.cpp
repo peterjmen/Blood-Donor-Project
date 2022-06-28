@@ -483,9 +483,19 @@ void makeBooking(int& loggedInIdNumber) {
     cout << endl;
     intInputChecker(chosenDateOfAppointment, 1, 31); // 1-31 as 31 days in july
 
-
+    
 
     string changeDataChoice = "booked" ;
+    
+    stringstream ss;
+
+    ss << loggedInIdNumber;
+
+    string convertedInt;
+
+    ss >> convertedInt;
+
+
     
     ///!!!to be added
     cout << "What time would you like to book? between 9am and 4pm\n";
@@ -498,8 +508,9 @@ void makeBooking(int& loggedInIdNumber) {
     case 9:
 
         if (personVector[chosenDateOfAppointment - 1][3] == "open") {
-            personVector[chosenDateOfAppointment - 1][3] = changeDataChoice;
-            cout << "you are booked for the " << chosenDateOfAppointment - 1 << " at 9am, we cant wait to see you \n\n";
+            personVector[chosenDateOfAppointment - 1][3] = "booked by " + convertedInt;
+
+            cout << "you are booked for the " << chosenDateOfAppointment  << " at 9am, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -512,7 +523,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][4] == "open") {
             personVector[chosenDateOfAppointment - 1][4] = changeDataChoice;//-1 to offset 0 index for patient number
-            cout << "you are booked for the " << chosenDateOfAppointment - 1 << " at 10am, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment  << " at 10am, we cant wait to see you \n\n";
             
         }
         else {
@@ -526,7 +537,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][5] == "open") {
             personVector[chosenDateOfAppointment - 1][5] = changeDataChoice;//-1 to offset 0 index for patient number
-            cout << "you are booked for the " << chosenDateOfAppointment - 1 << " at 11am, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment  << " at 11am, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -539,7 +550,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][6] == "open") {
             personVector[chosenDateOfAppointment - 1][6] = changeDataChoice;
-            cout << "you are booked for the " << chosenDateOfAppointment - 1 << " at 12pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment  << " at 12pm, we cant wait to see you \n\n";
             //-1 to offset 0 index for patient number
         }
         else {
@@ -553,7 +564,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][7] == "open") {
             personVector[chosenDateOfAppointment - 1][7] = changeDataChoice;//-1 to offset 0 index for patient number
-            cout << "you are booked for the " << chosenDateOfAppointment - 1 << " at 1pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment  << " at 1pm, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -566,7 +577,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][8] == "open") {
             personVector[chosenDateOfAppointment - 1][8] = changeDataChoice;//-1 to offset 0 index for patient number
-            cout << "you are booked for the " << chosenDateOfAppointment - 1 << " at 2pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment  << " at 2pm, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -579,7 +590,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][9] == "open") {
             personVector[chosenDateOfAppointment - 1][9] = changeDataChoice;//-1 to offset 0 index for patient number
-            cout << "you are booked for the " << chosenDateOfAppointment - 1 << " at 3pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment  << " at 3pm, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -592,7 +603,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][10] == "open") {
             personVector[chosenDateOfAppointment - 1][10] = changeDataChoice;//-1 to offset 0 index for patient number
-            cout << "you are booked for the " << chosenDateOfAppointment - 1 << " at 4pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment  << " at 4pm, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -685,7 +696,12 @@ void printBookingSheet() {
 
     //string day = "day";
 
-    cout << "What day would you like to book on? Please pick from July 1-31\n";
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            cout << left << setfill(' ') << setw(15) << personVector[j][i];
+        }
+        cout << endl;
+    }
    
 }
 
@@ -1851,7 +1867,7 @@ void viewDonorInformation() {
     cout << endl;
 
     cout << "********************DONOR INFORMATION END*******************\n\n";
-    cout << "Press any key to return to admin menu";
+    cout << "Press any key to return to main menu";
     system("pause > 0");
 
     return;
