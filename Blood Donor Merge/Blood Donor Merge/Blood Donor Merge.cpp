@@ -75,6 +75,7 @@ void locationReport();
 void recipientLogin(int& loggedInIdNumber, int attempts);
 void createRecipient(int& loggedInIdNumber);
 void loggedInRecipientSwitchStatement();
+void printLoggedInRecipientMenu();
 
 
 
@@ -1939,35 +1940,21 @@ void createRecipient(int& loggedInIdNumber) {
 
 
 
-
-
-/*
-void printLoggedInRecipientMenu() {
-
-    cout << "Welcome to the Recipient menu! \nWhat would you like to do?: " << endl;
-    cout << "1. Search for potential donors by matching blood type" << endl;
-    cout << "2. Search for potential donors by matching blood type and location" << endl;
-    cout << "3. View all available donors - sorted by name - in alphabetical order" << endl;
-    cout << "4. Exit" << endl;
-}
-*/
-
-//Main menu for admin once logged in
 void loggedInRecipientSwitchStatement() {
-    printLoggedInDonorMenu();
+    printLoggedInRecipientMenu();
     cout << "\nChoose your option: ";
     int recipientChoice;
     cin >> recipientChoice;
     intInputChecker(recipientChoice, 1, 4);
     switch (recipientChoice) {
     case 1:
-        cout << "View donors by matching blood type\n\n";
+        cout << "View Donors by matching blood type\n\n";
 
 
        loggedInRecipientSwitchStatement();
         break;
     case 2:
-        cout << "View Donors By blood type and location\n";
+        cout << "View Donors by matching blood type and location\n";
 
         loggedInRecipientSwitchStatement();
         break;
@@ -1975,6 +1962,9 @@ void loggedInRecipientSwitchStatement() {
         cout << "View Donors By name\n" << endl;
 
         loggedInRecipientSwitchStatement();
+        break;
+    case 4:
+        return;
         break;
 
 
@@ -1987,6 +1977,14 @@ void loggedInRecipientSwitchStatement() {
 }
 
 
+void printLoggedInRecipientMenu() {
+
+    cout << "\n\nWelcome to the Recipient menu! \nWhat would you like to do?: " << endl;
+    cout << "1. View Donors by matching blood type" << endl;
+    cout << "2. View Donors by matching blood type and location" << endl;
+    cout << "3. View Donors sorted by name" << endl;
+    cout << "4. Exit" << endl;
+}
 
 
 
