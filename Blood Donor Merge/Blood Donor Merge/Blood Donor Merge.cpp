@@ -52,7 +52,7 @@ void readRecipientReport();
 
 //Functions reading from CSV files to create 2d vectors, then allowing changes to the vector, writing out to a temporary csv file then deleting original file and replacing it with an updated one
 void makeChangeDonor();
-void makeChangeRecipient();
+
 
 //Function for 
 void printAdminMenu();
@@ -76,6 +76,7 @@ void recipientLogin(int& loggedInIdNumber, int attempts);
 void createRecipient(int& loggedInIdNumber);
 void loggedInRecipientSwitchStatement();
 void printLoggedInRecipientMenu();
+void makeChangeRecipient();
 
 
 
@@ -1118,6 +1119,8 @@ void readRecipientReport() {
     return;
 }
 
+
+/*
 void makeChangeRecipient() {
     fstream fileIn;
 
@@ -1212,7 +1215,7 @@ void makeChangeRecipient() {
     system("pause > 0");
     return;
 }
-
+*/
 
 //Admin menu item 7
 void viewDonorBloodTestReports() {
@@ -1969,7 +1972,7 @@ void createRecipient(int& loggedInIdNumber) {
 
     loggedInIdNumber = recipientNumber;
 
-    cout << "Recipient added, press any key to return to admin menu";
+    cout << "Recipient added, press any key to go to logged in menu\n\n";
     system("pause > 0");
     return;
 }
@@ -2000,7 +2003,15 @@ void loggedInRecipientSwitchStatement() {
 
         loggedInRecipientSwitchStatement();
         break;
+
     case 4:
+        cout << "Changing account details\n" << endl;
+
+        makeChangeRecipient();
+
+        loggedInRecipientSwitchStatement();
+        break;
+    case 5:
         main();
         break;
 
@@ -2025,12 +2036,135 @@ void printLoggedInRecipientMenu() {
     cout << "\t1. View Donors by matching blood type" << endl;
     cout << "\t2. View Donors by matching blood type and location" << endl;
     cout << "\t3. View Donors sorted by name" << endl;
-    cout << "\t4. Exit to main menu" << endl;
+    cout << "\t4. Make changes to account details" << endl;
+
+    cout << "\t5. Exit to main menu" << endl;
 }
 
 
 
 
+
+void makeChangeRecipient() {
+    fstream fileIn;
+
+    vector<vector<string>> personVector;
+    vector<string> rowOfIndividualsInfo;
+    string line, word;
+
+    //Assigning the file to read and flag
+    fileIn.open("blood_recipients.csv", ios::in); // ios in is to receive data from an external file
+
+    if (fileIn.is_open()) { //is open checks if the file is open or not
+        //While there is content to copy from fileIn to line, loop
+        while (getline(fileIn, line)) { //getline is needed to get the whole line and assign it to the variable "line"
+            rowOfIndividualsInfo.clear();//get string of rowOfIndividualsInfo and remove all it's content
+
+            stringstream str(line); //sstream required to take each "line" and essentially concatenate them together for one large string, without the problem of lines being broke up by newlines
+
+            //while there is content within the string, copy to WORD and stop at each comma
+            while (getline(str, word, ','))
+                rowOfIndividualsInfo.push_back(word); //appending content of var WORD into rowOfIndividualsInfo
+
+            personVector.push_back(rowOfIndividualsInfo); //Appending the rowOfIndividualsInfo content into CONTENT variable
+        }
+    }
+    else {
+        cout << "No file found\n";
+    }
+
+    bool editing = true;
+        while (editing == true) {
+            system("cls");
+            cout << "What aspect of your information would you like to change?" << endl;
+
+
+
+            cout << "\n\nRecipient Number (cant change) :\t" << personVector[loggedInIdNumber - 1][0] << endl;
+            cout << "\n1.  First Name : " << personVector[loggedInIdNumber - 1][1] << endl;
+            cout << "\n2.  Last Name : " << personVector[loggedInIdNumber - 1][2] << endl;
+            cout << "\n3.  Bloodtype : " << personVector[loggedInIdNumber - 1][3] << endl;
+            cout << "\n4.  Email : " << personVector[loggedInIdNumber - 1][4] << endl;
+            cout << "\n5. Contact Number : " << personVector[loggedInIdNumber - 1][5] << endl;
+            cout << "\n6. Location : " << personVector[loggedInIdNumber - 1][6] << endl;
+           
+            cout << "\n\nChoice : \t";
+
+            int changeColumnChoice;
+            
+        
+
+            cin >> changeColumnChoice;
+            intInputChecker(changeColumnChoice, 1, rowOfIndividualsInfo.size() - 2);// -1 due to making patient number inaccessible to change, changed to -3 so they cant change or read own username or password - el
+            cout << "\nTo What?: ";
+            string changeDataChoice;
+            cin >> changeDataChoice;
+
+            //hardcoded the outputs and changes to make it more readable also took out a few unnecicary for loops  - el :) 
+
+            personVector[loggedInIdNumber - 1][changeColumnChoice] = changeDataChoice;//-1 to offset 0 index for patient number
+
+
+            cout << "\n\nRecipient Number (cant change) :" << personVector[loggedInIdNumber - 1][0] << endl;
+            cout << "1.  First Name : " << personVector[loggedInIdNumber - 1][1] << endl;
+            cout << "\n2.  Last Name : " << personVector[loggedInIdNumber - 1][2] << endl;
+            cout << "\n3.  Bloodtype : " << personVector[loggedInIdNumber - 1][3] << endl;
+            cout << "\n4.  Email : " << personVector[loggedInIdNumber - 1][4] << endl;
+            cout << "\n5. Contact Number : " << personVector[loggedInIdNumber - 1][5] << endl;
+            cout << "\n6. Location : " << personVector[loggedInIdNumber - 1][6] << endl;
+
+
+            int editingInput;
+            cout << "\n\n Enter 1 to stop editing or anything else to continue : \t";
+            cin >> editingInput;
+
+            if (editingInput == 1) {
+                editing = false;
+                
+
+            }
+
+        }
+
+
+
+
+
+    cout << "\nPress any key to return to admin menu\n";
+    system("pause > 0");
+
+    fstream fileOut;
+
+    // Create a new file to store updated data
+    fileOut.open("blood_recipients_new.csv", ios::out);
+    if (!fileOut) {
+        cout << "No files found\n";
+        return;
+    }
+
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+            fileOut << personVector[j][i] << ",";
+        }
+        fileOut << endl;
+    }
+
+
+    fileIn.close();
+    fileOut.close();
+
+    // removing the existing file
+    remove("blood_recipients.csv");
+
+    // renaming the updated file with the existing file name
+    rename("blood_recipients_new.csv", "blood_recipients.csv");
+
+    //
+
+    cout << "\nAction complete, returning to main admin menu\n";
+    return;
+}
 
 
 
