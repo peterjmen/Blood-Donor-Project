@@ -90,36 +90,51 @@ void createDonor(int& loggedInIdNumber);
 void printBookingSheet();
 
 //-----------------------------MAIN
+
 int main() {
 
+    MAINMENU:
+    system("cls");
+
     if (attempts > 3) { return 0; };
+    cout << "\t\t***************************\n";
+    cout << "\t\t*Welcome to the bloodbank!*\n";
+    cout << "\t\t***************************\n\n";
+    cout << "Please select from the following account options;\n\n";
+    cout << "\t1. Donor Login & Sign up\n";
+    cout << "\t2. Recipient Login & Sign up\n";
+    cout << "\t3. Staff log in\n";
 
-    cout << "\tWelcome to the bloodbank\n\n";
-    cout << "Are you:\n";
-    cout << "1. A new or current donor\n";
-    cout << "2. A new or current recipient\n";
-    cout << "3. Staff\n";
-
+    cout << "\nSelection:\t";
 
     int welcomeScreenChoice;
     cin >> welcomeScreenChoice;
     intInputChecker(welcomeScreenChoice, 1, 3); // At the moment only allowed int input of 1-3 or will cout to re-enter
     switch (welcomeScreenChoice) {
     case 1:
-        cout << "You have selected new or current Donor" << endl;
-        cout << "Would you like to: \n";
-        cout << "1. Login\n";
-        cout << "2. Register\n";
+        system("cls");
+        cout << "\t\t********************\n";
+        cout << "\t\t*Donor Account Menu*\n";
+        cout << "\t\t********************\n\n";
+        cout << "Welcome to the Donor account menu, please select from the following list of options;\n\n";
+  
+        cout << "\t1. Login to an existing account\n";
+        cout << "\t2. Register a new account\n";
+        cout << "\t3. Return to the main menu\n";
+
+        cout << "\nSelection:\t";
+
         int input;
         cin >> input;
+        intInputChecker(input, 1, 3);
         switch (input) {
         case 1:
-            cout << "You have chosen to log in, please proceed: (You have 3 log in attempts) \n";
+            cout << "\nYou have chosen to log in, please proceed: (You have 3 log in attempts) \n";
             do {
                 donorLogin(loggedInIdNumber, attempts);
                 if (loggedInIdNumber == 0) {
                     attempts++;
-                    cout << "Username and or Password are incorrect, they are case sensetive so ensure caps lock is off\n";
+                    cout << "\nUsername and or Password are incorrect, they are case sensetive so ensure caps lock is off\n";
                     cout << "You have " << 3 - attempts << " attempts left\n";
                 }
             } while (attempts < 3 && loggedInIdNumber == 0);
@@ -128,27 +143,39 @@ int main() {
             }
             break;
         case 2:
-            cout << "You have chosen to create a new account, please proceed: \n";
+            cout << "\nYou have chosen to create a new account, please proceed: \n";
             createDonor(loggedInIdNumber);
             if (loggedInIdNumber != 0) {
                 loggedInDonorSwitchStatement();
             }
             break;
+        case 3:
+            goto MAINMENU;
+            break;
+
         }
 
 
         break;
     case 2:
-        cout << "You have selected new or current Recipient" << endl;
-        cout << "Would you like to: \n";
-        cout << "1. Login\n";
-        cout << "2. Register\n";
+        system("cls");
+        cout << "\t\t************************\n";
+        cout << "\t\t*Recipient Account Menu*\n";
+        cout << "\t\t************************\n\n";
+        cout << "Welcome to the Recipient account menu, please select from the following list of options;\n\n";
+
+        cout << "\t1. Login to an existing account\n";
+        cout << "\t2. Register a new account\n";
+        cout << "\t3. Return to the main menu\n";
+
+        cout << "\nSelection:\t";
 
         int inputB;
         cin >> inputB;
+        intInputChecker(inputB, 1, 3);
         switch (inputB) {
         case 1:
-            cout << "You have chosen to log in, please proceed: (You have 3 log in attempts) \n";
+            cout << "\nYou have chosen to log in, please proceed: (You have 3 log in attempts) \n";
             do {
                 recipientLogin(loggedInIdNumber, attempts);
                 if (loggedInIdNumber == 0) {
@@ -162,16 +189,23 @@ int main() {
             }
             break;
         case 2:
-            cout << "You have chosen to create a new account, please proceed: \n";
+            cout << "\nYou have chosen to create a new account, please proceed: \n";
             createRecipient(loggedInIdNumber);
             if (loggedInIdNumber != 0) {
                 loggedInRecipientSwitchStatement();
             }
             break;
+        case 3:
+            goto MAINMENU;
+            break;
         }
         
         break;
     case 3:
+        system("cls");
+        cout << "\t\t********************\n";
+        cout << "\t\t*Staff Account Menu*\n";
+        cout << "\t\t********************\n\n";
         cout << "You have selected Staff, Please enter Login, you have " << 3 - attempts << " attempts to log in or the program will terminate" << endl;
         adminLogin(attempts);
         if (attempts > 3) { return 0; };
@@ -282,16 +316,19 @@ void createDonor(int& loggedInIdNumber) {
         cout << "No files found\n";
         return;
     }
-    cout << "Enter details\n";
+    cout << "\nEnter details\n";
 
     int donorNumber;
     string username, password, firstName, lastName, nationality, ethnicity, dateOfBirth, gender, bloodType, underlyingConditions, location, email, contactNumber, lastDateDonation;
 
     donorNumber = rowCount + 1; //+1 to offset 0
-    cout << "Username : ";
-    cin.ignore(); getline(cin, username);
+    cout << "\nUsername : ";
+    cin.ignore(); 
+    getline(cin, username);
+ 
     cout << "Password : ";
     getline(cin, password);
+
     cout << "First Name : ";
     getline(cin, firstName);
     cout << "\nLast Name : ";
@@ -773,7 +810,7 @@ void donorLogin(int& loggedInIdNumber, int attempts) {
 
 
     string loginUsername, loginPassword;
-    cout << "Please enter username and password\n";
+    cout << "\nPlease enter username and password\n";
     cout << "Username : ";
     cin >> loginUsername;
     cout << "\nPassword : ";
@@ -784,13 +821,13 @@ void donorLogin(int& loggedInIdNumber, int attempts) {
         if (loginUsername == personVector[i][rowOfIndividualsInfo.size() - 2
         ] && loginPassword == personVector[i][rowOfIndividualsInfo.size() - 1]) {
             loggedInIdNumber = i + 1;
-            cout << "Thank you for loggin in, your patient number is : " << loggedInIdNumber << "\n";
+            cout << "\nThank you for loggin in, your patient number is : " << loggedInIdNumber << "\n";
         }
     };
 
     if (loggedInIdNumber == 0)
     {
-        cout << "That Username and Password combination does not exist\n";
+        cout << "\nThat Username and Password combination does not exist\n";
     };
 
 }
@@ -805,10 +842,10 @@ void adminLogin(int& attempts) {
         cout << "\nThat is 3 failed attempts, program terminated" << endl;
         return;
     }
-    cout << "\nUsername: " << endl;
+    cout << "\nUsername: ";
     string userName;
     cin >> userName;
-    cout << "\nPassword: " << endl;
+    cout << "\nPassword: ";
     string password;
     cin >> password;
     if (userName == "admin" && password == "admin") {
@@ -1851,10 +1888,10 @@ void recipientLogin(int& loggedInIdNumber, int attempts) {
         if (loginUsername == personVector[i][rowOfIndividualsInfo.size() - 2
         ] && loginPassword == personVector[i][rowOfIndividualsInfo.size() - 1]) {
             loggedInIdNumber = i + 1;
-            cout << "Thank you for loggin in, your patient number is : " << loggedInIdNumber << "\n";
+            cout << "Thank you for loggin in " << personVector[loggedInIdNumber - 1][1] << "\n";
         }
     };
-
+  
     if (loggedInIdNumber == 0)
     {
         cout << "That Username and Password combination does not exist\n";
@@ -1964,7 +2001,7 @@ void loggedInRecipientSwitchStatement() {
         loggedInRecipientSwitchStatement();
         break;
     case 4:
-        return;
+        main();
         break;
 
 
@@ -1978,12 +2015,17 @@ void loggedInRecipientSwitchStatement() {
 
 
 void printLoggedInRecipientMenu() {
+    system("cls");
+    cout << "\t\t************************\n";
+    cout << "\t\t*Recipient Account Menu*\n";
+    cout << "\t\t************************\n\n";
 
-    cout << "\n\nWelcome to the Recipient menu! \nWhat would you like to do?: " << endl;
-    cout << "1. View Donors by matching blood type" << endl;
-    cout << "2. View Donors by matching blood type and location" << endl;
-    cout << "3. View Donors sorted by name" << endl;
-    cout << "4. Exit" << endl;
+
+    cout << "\n\nWelcome to the Recipient menu! \n\nWhat would you like to do?: \n\n";
+    cout << "\t1. View Donors by matching blood type" << endl;
+    cout << "\t2. View Donors by matching blood type and location" << endl;
+    cout << "\t3. View Donors sorted by name" << endl;
+    cout << "\t4. Exit to main menu" << endl;
 }
 
 
