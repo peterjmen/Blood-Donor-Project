@@ -34,6 +34,10 @@ using namespace std;
 //Integer attempts made to keep to be the base counter for log in attempts
 int attempts = 0;
 int loggedInIdNumber = 0; //Number assigned on successful log in or account creation it is a primary key generated from either donor or recipient csv/entity file
+int maxRecipientReport;
+int maxDonorReport;
+
+
 
 //Function ***HARDCODED**to check if username and password is admin/admin, all lowercase, if not will no accept
 void adminLogin(int& attempts);
@@ -78,6 +82,8 @@ void loggedInRecipientSwitchStatement();
 void printLoggedInRecipientMenu(string firstName, string lastName);
 void makeChangeRecipient();
 void recipientDonorReport(int filterType, string bloodType, string location);
+int bloodTypeChecker(string inputtedType);
+string bloodTypeCorrector(string bloodType);
 
 
 //**** Ella
@@ -342,8 +348,27 @@ void createDonor(int& loggedInIdNumber) {
     getline(cin, dateOfBirth);
     cout << "\nGender : ";
     getline(cin, gender);
-    cout << "\nBloodtype : ";
-    getline(cin, bloodType);
+
+    string bloodTypeBuffer;
+    int bloodTypeLooper = 0;
+    
+    
+    while (bloodTypeLooper == 0) {
+
+        cout << "\nBloodtype : ";
+        getline(cin, bloodType);
+        
+        bloodTypeLooper = bloodTypeChecker(bloodType);
+
+        if (bloodTypeLooper == 0) {
+            cout << "\nInvalid Blood Type, please enter a real blood type : \t";
+        }
+
+
+    }
+
+
+
     cout << "\nUnderlying conditions : ";
     getline(cin, underlyingConditions);
     cout << "\nEmail : ";
@@ -877,6 +902,15 @@ void loggedInAdminOptions() {
         loggedInAdminOptions();
         break;
     case 3:
+        system("cls");
+        readDonorReport();
+
+
+        cout << "\n\nPlease enter the ID number of the account you would like to edit: \t ";
+        cin >> loggedInIdNumber;
+        intInputChecker(loggedInIdNumber, 1, maxDonorReport);
+
+
         makeChangeDonor();
         loggedInAdminOptions();
         break;
@@ -889,6 +923,15 @@ void loggedInAdminOptions() {
         loggedInAdminOptions();
         break;
     case 6:
+        system("cls");
+        readRecipientReport();
+
+
+        cout << "\n\nPlease enter the ID number of the account you would like to edit: \t ";
+        cin >> loggedInIdNumber;
+        intInputChecker(loggedInIdNumber, 1, maxRecipientReport);
+
+
         makeChangeRecipient();
         loggedInAdminOptions();
         break;
@@ -1006,9 +1049,12 @@ void readDonorReport() {
 
     }
 
+
+    maxDonorReport = personVector.size();
+
     int bufferWidth = widestChar + 3;
 
-
+        
     cout << "This is the data: \n\n";
     cout << "********************DONOR REPORT*******************\n";
     cout << left << setfill(' ') << setw(bufferWidth) << "Patient #" << left << setfill(' ') << setw(bufferWidth) << "Name" << left << setfill(' ') << setw(bufferWidth) << "Bloodtype" << left << setfill(' ') << setw(bufferWidth) << "ethnicity" << left << setfill(' ') << setw(bufferWidth) << "" << endl;
@@ -1072,8 +1118,25 @@ void createRecipient() {
     getline(cin, firstName);
     cout << "\nLast Name : ";
     getline(cin, lastName);
-    cout << "\nBloodtype : ";
-    getline(cin, bloodType);
+
+    string bloodTypeBuffer;
+    int bloodTypeLooper = 0;
+
+
+    while (bloodTypeLooper == 0) {
+
+        cout << "\nBloodtype : ";
+        getline(cin, bloodType);
+
+        bloodTypeLooper = bloodTypeChecker(bloodType);
+
+        if (bloodTypeLooper == 0) {
+            cout << "\nInvalid Blood Type, please enter a real blood type : \t";
+        }
+
+
+    }
+
     cout << "\nEmail : ";
     getline(cin, email);
     cout << "\nContact Number : ";
@@ -1135,6 +1198,9 @@ void readRecipientReport() {
         cout << "No file found\n";
     }
 
+
+    maxRecipientReport = personVector.size();
+
     int widestChar = 0;
     int currentVectorLength = 0;
     string currentVector;
@@ -1153,7 +1219,7 @@ void readRecipientReport() {
 
     }
 
-    int bufferWidth = 15;
+    int bufferWidth = widestChar + 3;
 
     cout << "This is the data: \n\n";
     cout << "********************RECIPIENT REPORT*******************\n";
@@ -1709,7 +1775,7 @@ void viewRecipientInformation() {
         return;
     }
 
-    cout << "Which recipient Data would you like to view?\n";
+    cout << "Please input the ID of the recipient whos details you would like to view: \t";
     int individualRecipientNumber;
     cin >> individualRecipientNumber;
     intInputChecker(individualRecipientNumber, 1, personVector.size());
@@ -1762,7 +1828,7 @@ void viewDonorInformation() {
     }
 
 
-    cout << "Which donor Data would you like to view?\n";
+    cout << "Please enter the ID of the donor you would like to view the information for: \t";
     int individualDonorNumber;
     cin >> individualDonorNumber;
 
@@ -1825,7 +1891,7 @@ void bloodGroupReport() {
     int matches = 0;
 
     for (int j = 0; j < personVector.size(); j++) {
-        if (personVector[j][2] == input) { //2 becuse location is index 3
+        if (personVector[j][7] == input) { //2 becuse location is index 3
             matches++;
             for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
                 cout << personVector[j][i] << "\t\t";
@@ -1879,7 +1945,7 @@ void bloodGroupReport() {
 
 
     for (int j = 0; j < recipientPersonVector.size(); j++) {
-        if (recipientPersonVector[j][2] == input) {//2 becuse location is index 3
+        if (recipientPersonVector[j][3] == input) {//2 becuse location is index 3
             matches++;
             for (int i = 0; i < recipientRowOfIndividualsInfo.size(); i++) {
                 cout << recipientPersonVector[j][i] << "\t\t";
@@ -2195,7 +2261,31 @@ void makeChangeRecipient() {
         intInputChecker(changeColumnChoice, 1, rowOfIndividualsInfo.size() - 2);// -1 due to making patient number inaccessible to change, changed to -3 so they cant change or read own username or password - el
         cout << "\nTo What?: ";
         string changeDataChoice;
-        cin >> changeDataChoice;
+        
+        if (changeColumnChoice != 3) {
+            cin >> changeDataChoice;
+        }
+        else {
+        
+                string bloodTypeBuffer;
+                int bloodTypeLooper = 0;
+
+
+                while (bloodTypeLooper == 0) {
+
+                    cout << "\nBloodtype : ";
+                    getline(cin, changeDataChoice);
+
+                    bloodTypeLooper = bloodTypeChecker(changeDataChoice);
+
+                    if (bloodTypeLooper == 0) {
+                        cout << "\nInvalid Blood Type, please enter a real blood type : \t";
+                    }
+
+
+                }
+            
+        }
 
         //hardcoded the outputs and changes to make it more readable also took out a few unnecicary for loops  - el :) 
 
@@ -2262,6 +2352,9 @@ void makeChangeRecipient() {
     cout << "\nAction complete, returning to main admin menu\n";
     return;
 }
+
+
+
 
 void recipientDonorReport(int filterType, string bloodType, string location) {
 
@@ -2398,5 +2491,26 @@ void recipientDonorReport(int filterType, string bloodType, string location) {
 }
 
 
+string bloodTypeCorrector(string bloodType) {
 
 
+
+    return " ";
+}
+
+
+int bloodTypeChecker(string inputtedType) {
+
+
+    if (inputtedType == "AB+" || inputtedType == "AB-" || inputtedType == "B+" || inputtedType == "B-" || inputtedType == "A+" || inputtedType == "A-" || inputtedType == "O+" || inputtedType == "O-") {
+
+        return 1;
+    }
+    else {
+        return 0;
+    }
+
+
+
+
+}
