@@ -83,7 +83,7 @@ void printLoggedInRecipientMenu(string firstName, string lastName);
 void makeChangeRecipient();
 void recipientDonorReport(int filterType, string bloodType, string location);
 int bloodTypeChecker(string inputtedType);
-string bloodTypeCorrector(string bloodType);
+bool bloodTypeMatching(string bloodType, string donorBloodType);
 
 
 //**** Ella
@@ -245,7 +245,7 @@ void printLoggedInDonorMenu() {
     cout << "2. Procedure to donate blood" << endl;
     cout << "3. Managing their information - make change " << endl;
     cout << "4. Booking for donation " << endl; //Time availibility for donation*/
-    cout << "5. ?View availible times for donation" << endl;
+    cout << "5. View availible times for donation" << endl;
     cout << "6. Admin options" << endl;
     cout << "7. Exit" << endl;
 }
@@ -358,13 +358,13 @@ void createDonor(int& loggedInIdNumber) {
 
     string bloodTypeBuffer;
     int bloodTypeLooper = 0;
-    
-    
+
+
     while (bloodTypeLooper == 0) {
 
         cout << "\nBloodtype : ";
         getline(cin, bloodType);
-        
+
         bloodTypeLooper = bloodTypeChecker(bloodType);
 
         if (bloodTypeLooper == 0) {
@@ -473,7 +473,7 @@ void makeChangeDonor() {
     cout << "\nTo What?: ";
     string changeDataChoice;
 
-   
+
 
     if (changeColumnChoice != 7) {
         cin >> changeDataChoice;
@@ -520,7 +520,7 @@ void makeChangeDonor() {
     cout << "\n12. Location : " << personVector[loggedInIdNumber - 1][12] << endl;
 
 
-   
+
 
 
     cout << "\nPress any key to return to admin menu\n";
@@ -642,7 +642,7 @@ void makeBooking(int& loggedInIdNumber) {
     case 10:
 
         if (personVector[chosenDateOfAppointment - 1][4] == "open") {
-            personVector[chosenDateOfAppointment - 1][4] = changeDataChoice;//-1 to offset 0 index for patient number
+            personVector[chosenDateOfAppointment - 1][4] = "booked by " + convertedInt;
             cout << "you are booked for the " << chosenDateOfAppointment << " at 10am, we cant wait to see you \n\n";
 
         }
@@ -656,7 +656,7 @@ void makeBooking(int& loggedInIdNumber) {
     case 11:
 
         if (personVector[chosenDateOfAppointment - 1][5] == "open") {
-            personVector[chosenDateOfAppointment - 1][5] = changeDataChoice;//-1 to offset 0 index for patient number
+            personVector[chosenDateOfAppointment - 1][5] = "booked by " + convertedInt;
             cout << "you are booked for the " << chosenDateOfAppointment << " at 11am, we cant wait to see you \n\n";
         }
         else {
@@ -669,7 +669,7 @@ void makeBooking(int& loggedInIdNumber) {
     case 12:
 
         if (personVector[chosenDateOfAppointment - 1][6] == "open") {
-            personVector[chosenDateOfAppointment - 1][6] = changeDataChoice;
+            personVector[chosenDateOfAppointment - 1][6] = "booked by " + convertedInt;
             cout << "you are booked for the " << chosenDateOfAppointment << " at 12pm, we cant wait to see you \n\n";
             //-1 to offset 0 index for patient number
         }
@@ -683,7 +683,7 @@ void makeBooking(int& loggedInIdNumber) {
     case 1:
 
         if (personVector[chosenDateOfAppointment - 1][7] == "open") {
-            personVector[chosenDateOfAppointment - 1][7] = changeDataChoice;//-1 to offset 0 index for patient number
+            personVector[chosenDateOfAppointment - 1][7] = "booked by " + convertedInt;
             cout << "you are booked for the " << chosenDateOfAppointment << " at 1pm, we cant wait to see you \n\n";
         }
         else {
@@ -696,7 +696,7 @@ void makeBooking(int& loggedInIdNumber) {
     case 2:
 
         if (personVector[chosenDateOfAppointment - 1][8] == "open") {
-            personVector[chosenDateOfAppointment - 1][8] = changeDataChoice;//-1 to offset 0 index for patient number
+            personVector[chosenDateOfAppointment - 1][8] = "booked by " + convertedInt;
             cout << "you are booked for the " << chosenDateOfAppointment << " at 2pm, we cant wait to see you \n\n";
         }
         else {
@@ -709,7 +709,7 @@ void makeBooking(int& loggedInIdNumber) {
     case 3:
 
         if (personVector[chosenDateOfAppointment - 1][9] == "open") {
-            personVector[chosenDateOfAppointment - 1][9] = changeDataChoice;//-1 to offset 0 index for patient number
+            personVector[chosenDateOfAppointment - 1][9] = "booked by " + convertedInt;
             cout << "you are booked for the " << chosenDateOfAppointment << " at 3pm, we cant wait to see you \n\n";
         }
         else {
@@ -722,7 +722,7 @@ void makeBooking(int& loggedInIdNumber) {
     case 4:
 
         if (personVector[chosenDateOfAppointment - 1][10] == "open") {
-            personVector[chosenDateOfAppointment - 1][10] = changeDataChoice;//-1 to offset 0 index for patient number
+            personVector[chosenDateOfAppointment - 1][10] = "booked by " + convertedInt;
             cout << "you are booked for the " << chosenDateOfAppointment << " at 4pm, we cant wait to see you \n\n";
         }
         else {
@@ -813,7 +813,7 @@ void printBookingSheet() {
     else {
         cout << "No file found\n";
     }
-    
+
     cout << "Below are the available times;\n\n\n";
 
     cout << left << setfill(' ') << setw(15) << "DATE" << left << setfill(' ') << setw(15) << "DAY" << left << setfill(' ') << setw(15) << "MONTH" << left << setfill(' ') << setw(15) << "9 AM" << left << setfill(' ') << setw(15) << "10 AM" << left << setfill(' ') << setw(15) << "11 AM" << left << setfill(' ') << setw(15) << "12 PM" << left << setfill(' ') << setw(15) << "1 PM" << left << setfill(' ') << setw(15) << "2 PM" << left << setfill(' ') << setw(15) << "3 PM" << left << setfill(' ') << setw(15) << "4 PM\n" << left << setfill(' ') << setw(15) << endl;
@@ -828,7 +828,7 @@ void printBookingSheet() {
         cout << endl;
     }
 
-    
+
 
 }
 
@@ -1066,15 +1066,15 @@ void readDonorReport() {
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-                
+
 
             currentVector = personVector[j][i];
 
             currentVectorLength = currentVector.length();
-            
+
             if (j == 0) {
 
-               
+
 
                 widestChar[i] = currentVectorLength;
 
@@ -1100,9 +1100,9 @@ void readDonorReport() {
     maxDonorReport = personVector.size();
 
 
-  
 
-        
+
+
     cout << "This is the data: \n\n";
     cout << "********************DONOR REPORT*******************\n";
     cout << left << setfill(' ') << setw(bufferWidth[0]) << "ID#" << left << setfill(' ') << setw(bufferWidth[1]) << "First" << left << setfill(' ') << setw(bufferWidth[2]) << "Last Name" << left << setfill(' ') << setw(bufferWidth[3]) << "Nationality" << left << setfill(' ') << setw(bufferWidth[4]) << "Ethnicity" << left << setfill(' ') << setw(bufferWidth[5]) << "DOB" << left << setfill(' ') << setw(bufferWidth[6]) << "Gender" << left << setfill(' ') << setw(bufferWidth[7]) << "Type" << left << setfill(' ') << setw(bufferWidth[8]) << "Conditions" << left << setfill(' ') << setw(bufferWidth[9]) << "Email" << left << setfill(' ') << setw(bufferWidth[10]) << "Phone Number" << left << setfill(' ') << setw(bufferWidth[11]) << "Last Dono" << left << setfill(' ') << setw(bufferWidth[12]) << "Location" << left << setfill(' ') << setw(bufferWidth[13]) << "Username" << left << setfill(' ') << setw(bufferWidth[14]) << "Password\n" << endl;
@@ -1818,7 +1818,7 @@ void locationReport() { //identical to blood group, however index is 3 becuase l
         cout << "No file found\n";
     }
 
-    
+
 
 
     for (int j = 0; j < recipientPersonVector.size(); j++) {
@@ -1847,7 +1847,7 @@ void locationReport() { //identical to blood group, however index is 3 becuase l
     }
 
 
-   
+
 
     for (int i = 0; i < 15; i++) {
         bufferWidth[i] = widestChar[i] + 3;
@@ -2481,30 +2481,30 @@ void makeChangeRecipient() {
         intInputChecker(changeColumnChoice, 1, rowOfIndividualsInfo.size() - 2);// -1 due to making patient number inaccessible to change, changed to -3 so they cant change or read own username or password - el
         cout << "\nTo What?: ";
         string changeDataChoice;
-        
+
         if (changeColumnChoice != 3) {
             cin >> changeDataChoice;
         }
         else {
-        
-                string bloodTypeBuffer;
-                int bloodTypeLooper = 0;
+
+            string bloodTypeBuffer;
+            int bloodTypeLooper = 0;
 
 
-                while (bloodTypeLooper == 0) {
+            while (bloodTypeLooper == 0) {
 
-                    cout << "\nBloodtype : ";
-                    getline(cin, changeDataChoice);
+                cout << "\nBloodtype : ";
+                getline(cin, changeDataChoice);
 
-                    bloodTypeLooper = bloodTypeChecker(changeDataChoice);
+                bloodTypeLooper = bloodTypeChecker(changeDataChoice);
 
-                    if (bloodTypeLooper == 0) {
-                        cout << "\nInvalid Blood Type, please enter a real blood type : \t";
-                    }
-
-
+                if (bloodTypeLooper == 0) {
+                    cout << "\nInvalid Blood Type, please enter a real blood type : \t";
                 }
-            
+
+
+            }
+
         }
 
         //hardcoded the outputs and changes to make it more readable also took out a few unnecicary for loops  - el :) 
@@ -2615,8 +2615,9 @@ void recipientDonorReport(int filterType, string bloodType, string location) {
     //prints the donor data based on the selected filter type
     switch (filterType) {
     case 1:
-
         cout << "\n\nViewing All donors with matching blood types to your own: \t Your Blood type is " << bloodType << "\n\n\n";
+
+
 
         cout << "This is the data: \n\n";
         cout << "********************DONOR REPORT*******************\n";
@@ -2625,9 +2626,9 @@ void recipientDonorReport(int filterType, string bloodType, string location) {
         cout << "\n";
         for (int j = 0; j < personVector.size(); j++) {
             donorBloodTypes = personVector[j][7];
+            
 
-
-            if (donorBloodTypes == bloodType) {
+            if (bloodTypeMatching(bloodType, donorBloodTypes) == true) {
                 for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
                     if (i != 3 && i != 4 && i != 5 && i != 9 && i != 10 && i != 11 && i != 13 && i != 14) {
                         cout << left << setfill(' ') << setw(15) << personVector[j][i];
@@ -2636,6 +2637,8 @@ void recipientDonorReport(int filterType, string bloodType, string location) {
                 cout << endl;
             }
         }
+
+        
 
         break;
     case 2:
@@ -2652,7 +2655,7 @@ void recipientDonorReport(int filterType, string bloodType, string location) {
             donorBloodTypes = personVector[j][7];
 
 
-            if (donorBloodTypes == bloodType && donorLocations == location) {
+            if (bloodTypeMatching(bloodType, donorBloodTypes) == true && donorLocations == location) {
                 for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
                     if (i != 3 && i != 4 && i != 5 && i != 9 && i != 10 && i != 11 && i != 13 && i != 14) {
                         cout << left << setfill(' ') << setw(15) << personVector[j][i];
@@ -2712,12 +2715,50 @@ void recipientDonorReport(int filterType, string bloodType, string location) {
 }
 
 
-string bloodTypeCorrector(string bloodType) {
+bool bloodTypeMatching(string bloodType, string donorBloodType) {
+
+
+    if (bloodType == donorBloodType) {
+        return true;
+    }
+    else if (bloodType == "AB+") {
+        return true;
+    }
+    else if (donorBloodType == "O-"){
+        return true;
+    }
+    else if (bloodType == "AB-") {
+        if (donorBloodType == "B-" || donorBloodType == "A-") {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else if (bloodType == "A+") {
+        if (donorBloodType == "A-") {
+            return true;
+        }
+        else {
+            return false;
+        }
+    } else if (bloodType == "B+") {
+        if (donorBloodType == "B-" ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
 
 
 
-    return " ";
 }
+
+
 
 
 int bloodTypeChecker(string inputtedType) {
