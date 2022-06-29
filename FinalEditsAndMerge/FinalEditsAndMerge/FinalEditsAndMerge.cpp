@@ -233,7 +233,14 @@ MAINMENU:
 /// </summary>
 void printLoggedInDonorMenu() {
 
-    cout << "Welcome to the Donor menu! \nWhat would you like to do?: " << endl;
+    system("cls");
+    cout << "\t\t********************\n";
+    cout << "\t\t*Donor Account Menu*\n";
+    cout << "\t\t********************\n\n";
+
+
+    cout << "Welcome to the Donor account menu, please select from the following list of options;\n\n";
+
     cout << "1. Benefits of blood donation" << endl;
     cout << "2. Procedure to donate blood" << endl;
     cout << "3. Managing their information - make change " << endl;
@@ -774,7 +781,8 @@ void makeBooking(int& loggedInIdNumber) {
     rename("blood_donors_booking_new.csv", "blood_donors_booking.csv");
 
 
-    cout << "Action complete, returning to main admin menu";
+    cout << "Press any key to return to donor option menu" << endl;
+    system("pause > 0");
     return;
 }
 
@@ -805,6 +813,10 @@ void printBookingSheet() {
     else {
         cout << "No file found\n";
     }
+    
+    cout << "Below are the available times;\n\n\n";
+
+    cout << left << setfill(' ') << setw(15) << "DATE" << left << setfill(' ') << setw(15) << "DAY" << left << setfill(' ') << setw(15) << "MONTH" << left << setfill(' ') << setw(15) << "9 AM" << left << setfill(' ') << setw(15) << "10 AM" << left << setfill(' ') << setw(15) << "11 AM" << left << setfill(' ') << setw(15) << "12 PM" << left << setfill(' ') << setw(15) << "1 PM" << left << setfill(' ') << setw(15) << "2 PM" << left << setfill(' ') << setw(15) << "3 PM" << left << setfill(' ') << setw(15) << "4 PM\n" << left << setfill(' ') << setw(15) << endl;
 
 
     //string day = "day";
@@ -815,6 +827,8 @@ void printBookingSheet() {
         }
         cout << endl;
     }
+
+    
 
 }
 
@@ -1710,11 +1724,49 @@ void locationReport() { //identical to blood group, however index is 3 becuase l
         cout << "No file found\n";
     }
 
+    int widestChar[15];
+    int currentVectorLength;
+    string currentVector;
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+
+
+            currentVector = personVector[j][i];
+
+            currentVectorLength = currentVector.length();
+
+            if (j == 0) {
+
+
+
+                widestChar[i] = currentVectorLength;
+
+            }
+            else if (currentVectorLength > widestChar[i]) {
+
+                widestChar[i] = currentVectorLength;
+
+            }
+
+        }
+
+    }
+
+
+    int bufferWidth[15];
+
+    for (int i = 0; i < 15; i++) {
+        bufferWidth[i] = widestChar[i] + 3;
+
+    }
+
 
 
     cout << "This is the data: \n\n";
     cout << "********************DONOR Location REPORT*******************\n";
-    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\t\t" << "Location\n";
+    cout << left << setfill(' ') << setw(bufferWidth[0]) << "ID#" << left << setfill(' ') << setw(bufferWidth[1]) << "First" << left << setfill(' ') << setw(bufferWidth[2]) << "Last Name" << left << setfill(' ') << setw(bufferWidth[3]) << "Nationality" << left << setfill(' ') << setw(bufferWidth[4]) << "Ethnicity" << left << setfill(' ') << setw(bufferWidth[5]) << "DOB" << left << setfill(' ') << setw(bufferWidth[6]) << "Gender" << left << setfill(' ') << setw(bufferWidth[7]) << "Type" << left << setfill(' ') << setw(bufferWidth[8]) << "Conditions" << left << setfill(' ') << setw(bufferWidth[9]) << "Email" << left << setfill(' ') << setw(bufferWidth[10]) << "Phone Number" << left << setfill(' ') << setw(bufferWidth[11]) << "Last Dono" << left << setfill(' ') << setw(bufferWidth[12]) << "Location" << left << setfill(' ') << setw(bufferWidth[13]) << "Username" << left << setfill(' ') << setw(bufferWidth[14]) << "Password\n" << endl;
+
 
     int matches = 0;
 
@@ -1722,7 +1774,7 @@ void locationReport() { //identical to blood group, however index is 3 becuase l
         if (personVector[j][12] == input) { //3 becuse location is index 3
             matches++;
             for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-                cout << personVector[j][i] << "\t\t";
+                cout << left << setfill(' ') << setw(bufferWidth[i]) << personVector[j][i];
             }
             cout << endl;
         }
@@ -1766,18 +1818,57 @@ void locationReport() { //identical to blood group, however index is 3 becuase l
         cout << "No file found\n";
     }
 
+    
+
+
+    for (int j = 0; j < recipientPersonVector.size(); j++) {
+        for (int i = 0; i < recipientRowOfIndividualsInfo.size(); i++) {
+
+
+            currentVector = recipientPersonVector[j][i];
+
+            currentVectorLength = currentVector.length();
+
+            if (j == 0) {
+
+
+
+                widestChar[i] = currentVectorLength;
+
+            }
+            else if (currentVectorLength > widestChar[i]) {
+
+                widestChar[i] = currentVectorLength;
+
+            }
+
+        }
+
+    }
+
+
+   
+
+    for (int i = 0; i < 15; i++) {
+        bufferWidth[i] = widestChar[i] + 3;
+
+    }
+
+
+
 
 
     cout << "This is the data: \n\n";
     cout << "********************Recipients Location REPORT*******************\n";
-    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\t\t" << "Location\n";
+    cout << left << setfill(' ') << setw(bufferWidth[0]) << "ID#" << left << setfill(' ') << setw(bufferWidth[1]) << "Name" << left << setfill(' ') << setw(bufferWidth[2]) << "Last Name" << left << setfill(' ') << setw(bufferWidth[3]) << "Type" << left << setfill(' ') << setw(bufferWidth[4]) << "Email" << left << setfill(' ') << setw(bufferWidth[5]) << "Phone Number" << left << setfill(' ') << setw(bufferWidth[6]) << "Location" << left << setfill(' ') << setw(bufferWidth[7]) << "Username" << left << setfill(' ') << setw(bufferWidth[8]) << "Password\n" << left << setfill(' ') << setw(bufferWidth[9]) << endl;
+
 
 
     for (int j = 0; j < recipientPersonVector.size(); j++) {
         if (recipientPersonVector[j][6] == input) {  //3 becuse location is index 3
             matches++;
             for (int i = 0; i < recipientRowOfIndividualsInfo.size(); i++) {
-                cout << recipientPersonVector[j][i] << "\t\t";
+                cout << left << setfill(' ') << setw(bufferWidth[i]) << recipientPersonVector[j][i];
             }
             cout << endl;
         }
@@ -1908,7 +1999,7 @@ void bloodGroupReport() {
     fstream fileIn;
 
     string input;
-    cout << "Donors & recipients matching what blood type would you like to see?";
+    cout << "Donors & recipients matching what location type would you like to see?";
     cin >> input;
 
     vector<vector<string>> personVector;
@@ -1933,19 +2024,57 @@ void bloodGroupReport() {
         cout << "No file found\n";
     }
 
+    int widestChar[15];
+    int currentVectorLength;
+    string currentVector;
+
+    for (int j = 0; j < personVector.size(); j++) {
+        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+
+
+            currentVector = personVector[j][i];
+
+            currentVectorLength = currentVector.length();
+
+            if (j == 0) {
+
+
+
+                widestChar[i] = currentVectorLength;
+
+            }
+            else if (currentVectorLength > widestChar[i]) {
+
+                widestChar[i] = currentVectorLength;
+
+            }
+
+        }
+
+    }
+
+
+    int bufferWidth[15];
+
+    for (int i = 0; i < 15; i++) {
+        bufferWidth[i] = widestChar[i] + 3;
+
+    }
+
 
 
     cout << "This is the data: \n\n";
-    cout << "********************DONOR Bloodtype REPORT*******************\n";
-    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\t\t" << "Location\n";
+    cout << "********************DONOR Location REPORT*******************\n";
+    cout << left << setfill(' ') << setw(bufferWidth[0]) << "ID#" << left << setfill(' ') << setw(bufferWidth[1]) << "First" << left << setfill(' ') << setw(bufferWidth[2]) << "Last Name" << left << setfill(' ') << setw(bufferWidth[3]) << "Nationality" << left << setfill(' ') << setw(bufferWidth[4]) << "Ethnicity" << left << setfill(' ') << setw(bufferWidth[5]) << "DOB" << left << setfill(' ') << setw(bufferWidth[6]) << "Gender" << left << setfill(' ') << setw(bufferWidth[7]) << "Type" << left << setfill(' ') << setw(bufferWidth[8]) << "Conditions" << left << setfill(' ') << setw(bufferWidth[9]) << "Email" << left << setfill(' ') << setw(bufferWidth[10]) << "Phone Number" << left << setfill(' ') << setw(bufferWidth[11]) << "Last Dono" << left << setfill(' ') << setw(bufferWidth[12]) << "Location" << left << setfill(' ') << setw(bufferWidth[13]) << "Username" << left << setfill(' ') << setw(bufferWidth[14]) << "Password\n" << endl;
+
 
     int matches = 0;
 
     for (int j = 0; j < personVector.size(); j++) {
-        if (personVector[j][7] == input) { //2 becuse location is index 3
+        if (personVector[j][7] == input) { //3 becuse location is index 3
             matches++;
             for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-                cout << personVector[j][i] << "\t\t";
+                cout << left << setfill(' ') << setw(bufferWidth[i]) << personVector[j][i];
             }
             cout << endl;
         }
@@ -1957,12 +2086,13 @@ void bloodGroupReport() {
     else {
         cout << "no matches, check spelling\n";
     }
-    cout << "********************DONOR Bloodtype report END*******************\n\n";
+    cout << "********************DONOR Location END*******************\n\n";
+
+    matches = 0;
 
     fileIn.close();
-    matches = 0;
-    ////recipients
 
+    ////recipients
 
     fileIn.open("blood_recipients.csv", ios::in);
 
@@ -1990,16 +2120,55 @@ void bloodGroupReport() {
 
 
 
+
+    for (int j = 0; j < recipientPersonVector.size(); j++) {
+        for (int i = 0; i < recipientRowOfIndividualsInfo.size(); i++) {
+
+
+            currentVector = recipientPersonVector[j][i];
+
+            currentVectorLength = currentVector.length();
+
+            if (j == 0) {
+
+
+
+                widestChar[i] = currentVectorLength;
+
+            }
+            else if (currentVectorLength > widestChar[i]) {
+
+                widestChar[i] = currentVectorLength;
+
+            }
+
+        }
+
+    }
+
+
+
+
+    for (int i = 0; i < 15; i++) {
+        bufferWidth[i] = widestChar[i] + 3;
+
+    }
+
+
+
+
+
     cout << "This is the data: \n\n";
-    cout << "********************Recipients REPORT*******************\n";
-    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\t\t" << "Location\n";
+    cout << "********************Recipients Location REPORT*******************\n";
+    cout << left << setfill(' ') << setw(bufferWidth[0]) << "ID#" << left << setfill(' ') << setw(bufferWidth[1]) << "Name" << left << setfill(' ') << setw(bufferWidth[2]) << "Last Name" << left << setfill(' ') << setw(bufferWidth[3]) << "Type" << left << setfill(' ') << setw(bufferWidth[4]) << "Email" << left << setfill(' ') << setw(bufferWidth[5]) << "Phone Number" << left << setfill(' ') << setw(bufferWidth[6]) << "Location" << left << setfill(' ') << setw(bufferWidth[7]) << "Username" << left << setfill(' ') << setw(bufferWidth[8]) << "Password\n" << left << setfill(' ') << setw(bufferWidth[9]) << endl;
+
 
 
     for (int j = 0; j < recipientPersonVector.size(); j++) {
-        if (recipientPersonVector[j][3] == input) {//2 becuse location is index 3
+        if (recipientPersonVector[j][3] == input) {  //3 becuse location is index 3
             matches++;
             for (int i = 0; i < recipientRowOfIndividualsInfo.size(); i++) {
-                cout << recipientPersonVector[j][i] << "\t\t";
+                cout << left << setfill(' ') << setw(bufferWidth[i]) << recipientPersonVector[j][i];
             }
             cout << endl;
         }
@@ -2010,7 +2179,7 @@ void bloodGroupReport() {
     else {
         cout << "no matches, check spelling\n";
     }
-    cout << "********************Recipients END*******************\n\n";
+    cout << "********************Recipients Location END*******************\n\n";
 
     cout << "Press any key to return to main menu";
     system("pause > 0");
