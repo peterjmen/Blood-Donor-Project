@@ -457,13 +457,43 @@ void makeChangeDonor() {
     cout << "\n11. Date of last donation? (if known, enter \"unsure\" if so) : " << personVector[loggedInIdNumber - 1][11] << endl;
     cout << "\n12. Location : " << personVector[loggedInIdNumber - 1][12] << endl;
 
+
+    cout << "\n\nEnter the column youd like to edit: \t";
+
     int changeColumnChoice;
     cin >> changeColumnChoice;
     intInputChecker(changeColumnChoice, 1, rowOfIndividualsInfo.size() - 2);// -1 due to making patient number inaccessible to change, changed to -3 so they cant change or read own username or password - el
     cout << "\nTo What?: ";
     string changeDataChoice;
-    cin >> changeDataChoice;
 
+   
+
+    if (changeColumnChoice != 7) {
+        cin >> changeDataChoice;
+    }
+    else {
+
+        string bloodTypeBuffer;
+        int bloodTypeLooper = 0;
+
+
+        while (bloodTypeLooper == 0) {
+
+            cout << "\nBloodtype : ";
+            getline(cin, changeDataChoice);
+
+            bloodTypeLooper = bloodTypeChecker(changeDataChoice);
+
+            if (bloodTypeLooper == 0) {
+                cout << "\nInvalid Blood Type, please enter a real blood type : \t";
+            }
+
+
+        }
+
+    }
+
+    system("cls");
     //hardcoded the outputs and changes to make it more readable also took out a few unnecicary for loops  - el :) 
 
     personVector[loggedInIdNumber - 1][changeColumnChoice] = changeDataChoice;//-1 to offset 0 index for patient number
@@ -483,25 +513,7 @@ void makeChangeDonor() {
     cout << "\n12. Location : " << personVector[loggedInIdNumber - 1][12] << endl;
 
 
-
-
-
-
-    //  << donorNumber << ","
-    // << firstName << ","
-    // << lastName << ","
-    //  << nationality << ","
-    //  << ethnicity << ","
-    //  << nationality << ","
-    //  << gender << ","
-    //  << bloodType << ","
-    //  << underlyingConditions << ","
-    //  << email << ","
-    //  << contactNumber << ","
-    //  << lastDateDonation << ","
-    //  << username << ","
-    //  << password << ","
-
+   
 
 
     cout << "\nPress any key to return to admin menu\n";
@@ -1031,18 +1043,32 @@ void readDonorReport() {
         cout << "No file found\n";
     }
 
-    int widestChar = 0;
-    int currentVectorLength = 0;
+
+
+
+    int widestChar[15];
+    int currentVectorLength;
     string currentVector;
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
+                
 
             currentVector = personVector[j][i];
 
             currentVectorLength = currentVector.length();
-            if (currentVectorLength > widestChar) {
-                widestChar = currentVectorLength;
+            
+            if (j == 0) {
+
+               
+
+                widestChar[i] = currentVectorLength;
+
+            }
+            else if (currentVectorLength > widestChar[i]) {
+
+                widestChar[i] = currentVectorLength;
+
             }
 
         }
@@ -1050,20 +1076,28 @@ void readDonorReport() {
     }
 
 
+    int bufferWidth[15];
+
+    for (int i = 0; i < 15; i++) {
+        bufferWidth[i] = widestChar[i] + 3;
+
+    }
+
     maxDonorReport = personVector.size();
 
-    int bufferWidth = widestChar + 3;
+
+  
 
         
     cout << "This is the data: \n\n";
     cout << "********************DONOR REPORT*******************\n";
-    cout << left << setfill(' ') << setw(bufferWidth) << "Patient #" << left << setfill(' ') << setw(bufferWidth) << "Name" << left << setfill(' ') << setw(bufferWidth) << "Bloodtype" << left << setfill(' ') << setw(bufferWidth) << "ethnicity" << left << setfill(' ') << setw(bufferWidth) << "" << endl;
+    cout << left << setfill(' ') << setw(bufferWidth[0]) << "ID#" << left << setfill(' ') << setw(bufferWidth[1]) << "First" << left << setfill(' ') << setw(bufferWidth[2]) << "Last Name" << left << setfill(' ') << setw(bufferWidth[3]) << "Nationality" << left << setfill(' ') << setw(bufferWidth[4]) << "Ethnicity" << left << setfill(' ') << setw(bufferWidth[5]) << "DOB" << left << setfill(' ') << setw(bufferWidth[6]) << "Gender" << left << setfill(' ') << setw(bufferWidth[7]) << "Type" << left << setfill(' ') << setw(bufferWidth[8]) << "Conditions" << left << setfill(' ') << setw(bufferWidth[9]) << "Email" << left << setfill(' ') << setw(bufferWidth[10]) << "Phone Number" << left << setfill(' ') << setw(bufferWidth[11]) << "Last Dono" << left << setfill(' ') << setw(bufferWidth[12]) << "Location" << left << setfill(' ') << setw(bufferWidth[13]) << "Username" << left << setfill(' ') << setw(bufferWidth[14]) << "Password\n" << endl;
 
 
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            cout << left << setfill(' ') << setw(bufferWidth) << personVector[j][i];
+            cout << left << setfill(' ') << setw(bufferWidth[i]) << personVector[j][i];
         }
         cout << endl;
     }
@@ -1201,35 +1235,52 @@ void readRecipientReport() {
 
     maxRecipientReport = personVector.size();
 
-    int widestChar = 0;
-    int currentVectorLength = 0;
+    int widestChar[15];
+    int currentVectorLength;
     string currentVector;
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
 
+
             currentVector = personVector[j][i];
 
             currentVectorLength = currentVector.length();
-            if (currentVectorLength > widestChar) {
-                widestChar = currentVectorLength;
+
+            if (j == 0) {
+
+
+
+                widestChar[i] = currentVectorLength;
+
+            }
+            else if (currentVectorLength > widestChar[i]) {
+
+                widestChar[i] = currentVectorLength;
+
             }
 
         }
 
     }
 
-    int bufferWidth = widestChar + 3;
+
+    int bufferWidth[15];
+
+    for (int i = 0; i < 15; i++) {
+        bufferWidth[i] = widestChar[i] + 3;
+
+    }
 
     cout << "This is the data: \n\n";
     cout << "********************RECIPIENT REPORT*******************\n";
-    cout << left << setfill(' ') << setw(bufferWidth) << "Patient #" << left << setfill(' ') << setw(bufferWidth) << "First Name" << left << setfill(' ') << setw(bufferWidth) << "Last Name" << left << setfill(' ') << setw(bufferWidth) << "Blood Type" << left << setfill(' ') << setw(bufferWidth) << "Email" << left << setfill(' ') << setw(bufferWidth) << "Phone Number" << left << setfill(' ') << setw(bufferWidth) << "Location" << left << setfill(' ') << setw(bufferWidth) << "Account details\n" << left << setfill(' ') << setw(bufferWidth) << endl;
+    cout << left << setfill(' ') << setw(bufferWidth[0]) << "ID#" << left << setfill(' ') << setw(bufferWidth[1]) << "Name" << left << setfill(' ') << setw(bufferWidth[2]) << "Last Name" << left << setfill(' ') << setw(bufferWidth[3]) << "Type" << left << setfill(' ') << setw(bufferWidth[4]) << "Email" << left << setfill(' ') << setw(bufferWidth[5]) << "Phone Number" << left << setfill(' ') << setw(bufferWidth[6]) << "Location" << left << setfill(' ') << setw(bufferWidth[7]) << "Username" << left << setfill(' ') << setw(bufferWidth[8]) << "Password\n" << left << setfill(' ') << setw(bufferWidth[9]) << endl;
 
 
     for (int j = 0; j < personVector.size(); j++) {
         for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
 
-            cout << left << setfill(' ') << setw(bufferWidth) << personVector[j][i];
+            cout << left << setfill(' ') << setw(bufferWidth[i]) << personVector[j][i];
 
 
         }
@@ -2291,6 +2342,7 @@ void makeChangeRecipient() {
 
         personVector[loggedInIdNumber - 1][changeColumnChoice] = changeDataChoice;//-1 to offset 0 index for patient number
 
+        system("cls");
 
         cout << "\n\nRecipient Number (cant change) :" << personVector[loggedInIdNumber - 1][0] << endl;
         cout << "1.  First Name : " << personVector[loggedInIdNumber - 1][1] << endl;
