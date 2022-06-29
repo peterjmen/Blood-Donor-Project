@@ -47,7 +47,7 @@ void intInputChecker(int& inputToCheck, int minAllowed, int maxAllowed);
 
 //Functions with cin & getline(cin, input) writing out to csv file
 //void createDonor();
-void createRecipient();
+
 
 //Functions reading from CSV files to create 2d vectors
 void readDonorReport();
@@ -941,7 +941,7 @@ void loggedInAdminOptions() {
         loggedInAdminOptions();
         break;
     case 4:
-        createRecipient();
+        createRecipient(loggedInIdNumber);
         loggedInAdminOptions();
         break;
     case 5:
@@ -1123,97 +1123,6 @@ void readDonorReport() {
 }
 //Admin menu item 3
 
-void createRecipient() {
-
-
-    fstream fileIn;
-
-    fileIn.open("blood_recipients.csv", ios::in);
-    if (!fileIn) {
-        cout << "No files found\n";
-        return;
-    }
-
-    string wholeLines;
-    int rowCount = 0;
-
-    while (getline(fileIn, wholeLines)) {
-        wholeLines.clear();
-        stringstream wholeDocument(wholeLines);
-        rowCount++;
-    }
-
-    fileIn.close();
-
-    fstream fileOut;
-
-    fileOut.open("blood_recipients.csv", ios::out | ios::app);
-    if (!fileOut) {
-        cout << "No files found\n";
-        return;
-    }
-    cout << "Enter details\n";
-
-    int recipientNumber;
-    string username, password, firstName, lastName, bloodType, location, email, contactNumber;
-
-    recipientNumber = rowCount + 1; //+1 to offset 0
-    cout << "Username : ";
-    cin.ignore(); getline(cin, username);
-    cout << "Password : ";
-    getline(cin, password);
-    cout << "First Name : ";
-    getline(cin, firstName);
-    cout << "\nLast Name : ";
-    getline(cin, lastName);
-
-    string bloodTypeBuffer;
-    int bloodTypeLooper = 0;
-
-
-    while (bloodTypeLooper == 0) {
-
-        cout << "\nBloodtype : ";
-        getline(cin, bloodType);
-
-        bloodTypeLooper = bloodTypeChecker(bloodType);
-
-        if (bloodTypeLooper == 0) {
-            cout << "\nInvalid Blood Type, please enter a real blood type : \t";
-        }
-
-
-    }
-
-    cout << "\nEmail : ";
-    getline(cin, email);
-    cout << "\nContact Number : ";
-    getline(cin, contactNumber);
-    cout << "\Location : ";
-    getline(cin, location);
-
-
-
-    fileOut
-        << recipientNumber << ","
-        << firstName << ","
-        << lastName << ","
-        << bloodType << ","
-        << email << ","
-        << contactNumber << ","
-        << location << ","
-        << username << ","
-        << password << ","
-        << "\n";
-
-    fileOut.close();
-
-    loggedInIdNumber = recipientNumber;
-
-    cout << "Recipient added, press any key to go to logged in menu\n\n";
-    system("pause > 0");
-    return;
-}
 
 
 //Admin menu item 4
@@ -2154,6 +2063,7 @@ void recipientLogin(int& loggedInIdNumber, int attempts) {
 
 void createRecipient(int& loggedInIdNumber) {
 
+
     fstream fileIn;
 
     fileIn.open("blood_recipients.csv", ios::in);
@@ -2194,8 +2104,25 @@ void createRecipient(int& loggedInIdNumber) {
     getline(cin, firstName);
     cout << "\nLast Name : ";
     getline(cin, lastName);
-    cout << "\nBloodtype : ";
-    getline(cin, bloodType);
+
+    string bloodTypeBuffer;
+    int bloodTypeLooper = 0;
+
+
+    while (bloodTypeLooper == 0) {
+
+        cout << "\nBloodtype : ";
+        getline(cin, bloodType);
+
+        bloodTypeLooper = bloodTypeChecker(bloodType);
+
+        if (bloodTypeLooper == 0) {
+            cout << "\nInvalid Blood Type, please enter a real blood type : \t";
+        }
+
+
+    }
+
     cout << "\nEmail : ";
     getline(cin, email);
     cout << "\nContact Number : ";
@@ -2224,6 +2151,8 @@ void createRecipient(int& loggedInIdNumber) {
     cout << "Recipient added, press any key to go to logged in menu\n\n";
     system("pause > 0");
     return;
+
+
 }
 
 
