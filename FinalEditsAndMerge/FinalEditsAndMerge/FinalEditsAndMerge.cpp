@@ -630,7 +630,7 @@ void makeBooking(int& loggedInIdNumber) {
         if (personVector[chosenDateOfAppointment - 1][3] == "open") {
             personVector[chosenDateOfAppointment - 1][3] = "booked by " + convertedInt;
 
-            cout << "you are booked for the " << chosenDateOfAppointment << " at 9am, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment << " of July at 9am, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -643,7 +643,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][4] == "open") {
             personVector[chosenDateOfAppointment - 1][4] = "booked by " + convertedInt;
-            cout << "you are booked for the " << chosenDateOfAppointment << " at 10am, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment << " of July at 10am, we cant wait to see you \n\n";
 
         }
         else {
@@ -657,7 +657,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][5] == "open") {
             personVector[chosenDateOfAppointment - 1][5] = "booked by " + convertedInt;
-            cout << "you are booked for the " << chosenDateOfAppointment << " at 11am, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment << " of July at 11am, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -670,7 +670,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][6] == "open") {
             personVector[chosenDateOfAppointment - 1][6] = "booked by " + convertedInt;
-            cout << "you are booked for the " << chosenDateOfAppointment << " at 12pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment << " of July at 12pm, we cant wait to see you \n\n";
             //-1 to offset 0 index for patient number
         }
         else {
@@ -684,7 +684,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][7] == "open") {
             personVector[chosenDateOfAppointment - 1][7] = "booked by " + convertedInt;
-            cout << "you are booked for the " << chosenDateOfAppointment << " at 1pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment << " of July at 1pm, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -697,7 +697,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][8] == "open") {
             personVector[chosenDateOfAppointment - 1][8] = "booked by " + convertedInt;
-            cout << "you are booked for the " << chosenDateOfAppointment << " at 2pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment << " of July at 2pm, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -710,7 +710,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][9] == "open") {
             personVector[chosenDateOfAppointment - 1][9] = "booked by " + convertedInt;
-            cout << "you are booked for the " << chosenDateOfAppointment << " at 3pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment << " of July at 3pm, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -723,7 +723,7 @@ void makeBooking(int& loggedInIdNumber) {
 
         if (personVector[chosenDateOfAppointment - 1][10] == "open") {
             personVector[chosenDateOfAppointment - 1][10] = "booked by " + convertedInt;
-            cout << "you are booked for the " << chosenDateOfAppointment << " at 4pm, we cant wait to see you \n\n";
+            cout << "you are booked for the " << chosenDateOfAppointment << " of July at 4pm, we cant wait to see you \n\n";
         }
         else {
             cout << "That slot is already taken, please select another date";
@@ -1310,102 +1310,6 @@ void readRecipientReport() {
 }
 
 
-/*
-void makeChangeRecipient() {
-    fstream fileIn;
-
-
-    vector<vector<string>> personVector;
-    vector<string> rowOfIndividualsInfo;
-    string line, word;
-
-    //Assigning the file to read and flag
-    fileIn.open("blood_recipients.csv", ios::in); // ios in is to receive data from an external file
-
-    if (fileIn.is_open()) { //is open checks if the file is open or not
-        //WHile there is content to copy from fileIn to line, loop
-        while (getline(fileIn, line)) {
-            rowOfIndividualsInfo.clear();//get string of rowOfIndividualsInfo and remove all it's content
-
-            stringstream str(line); //sstream requires it's own pre-processor initialization. converfts file data to string format
-
-            //while there is content within the string, copy to WORD and stop at each comma
-            while (getline(str, word, ','))
-                rowOfIndividualsInfo.push_back(word); //appending content of var WORD into rowOfIndividualsInfo
-
-            personVector.push_back(rowOfIndividualsInfo); //Appending the rowOfIndividualsInfo content into CONTENT variable
-        }
-    }
-    else {
-        cout << "No recipients have been entered yet (no file has been made)\n";
-    }
-
-
-    cout << "Who's data would you like to change? Enter person ID number:\n";
-    int changerowOfIndividualsInfoChoice;
-    cin >> changerowOfIndividualsInfoChoice;
-    intInputChecker(changerowOfIndividualsInfoChoice, 1, personVector.size());
-    cout << "\nWhat type of information of theirs would you like to change?: ";
-    cout << "\n1. Name: ";
-    cout << "\n2. Bloodtype: ";
-    cout << "\n3. Location: ";
-
-
-    int changeColumnChoice;
-    cin >> changeColumnChoice;
-    intInputChecker(changeColumnChoice, 1, rowOfIndividualsInfo.size() - 1);// -1 due to making patient number inaccessible to change
-    cout << "\nTo What?: ";
-    string changeDataChoice;
-    cin >> changeDataChoice;
-
-
-    personVector[changerowOfIndividualsInfoChoice - 1][changeColumnChoice] = changeDataChoice;//-1 to offset 0 index for patient number
-
-    cout << "The changed Details : \n";
-    cout << "********************DETAILS CHANGE REPORT*******************\n";
-    cout << "Patient #\t" << "Name\t\t" << "Bloodtype\t\t" << "Location\n";
-
-
-    for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-        cout << personVector[changerowOfIndividualsInfoChoice - 1][i] << "\t\t";
-    }
-    cout << "\n********************CHANGE REPORT END*******************\n\n";
-
-
-
-    fstream fileOut;
-
-    // Create a new file to store updated data
-    fileOut.open("blood_recipients_new.csv", ios::out);
-    if (!fileOut) {
-        cout << "No files found\n";
-        return;
-    }
-
-
-    for (int j = 0; j < personVector.size(); j++) {
-        for (int i = 0; i < rowOfIndividualsInfo.size(); i++) {
-            fileOut << personVector[j][i] << ",";
-        }
-        fileOut << endl;
-    }
-
-
-    fileIn.close();
-    fileOut.close();
-
-    // removing the existing file
-    remove("blood_recipients.csv");
-
-    // renaming the updated file with the existing file name
-    rename("blood_recipients_new.csv", "blood_recipients.csv");
-
-
-    cout << "Data changed, press any key to return to admin menu";
-    system("pause > 0");
-    return;
-}
-*/
 
 //Admin menu item 7
 void viewDonorBloodTestReports() {
